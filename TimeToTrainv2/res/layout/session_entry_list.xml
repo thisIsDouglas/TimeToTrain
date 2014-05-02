@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="edu.calpoly.dfjimene.SessionListActivity$SessionListFragment" >
+
+    <Button
+        android:id="@+id/view_add_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_entry"
+        android:gravity="center" />
+
+    <ListView
+        android:id="@+id/entry_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>

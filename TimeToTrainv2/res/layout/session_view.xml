@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    android:layout_margin="8dp"
+    android:orientation="horizontal"
+    android:weightSum="1.0" >
+
+    <TextView
+        android:id="@+id/SessionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.89"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_weight="0.11"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center"
+        android:src="@drawable/ic_menu_forward" />
+
+</LinearLayout>
