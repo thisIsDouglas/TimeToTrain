@@ -75,11 +75,7 @@ public class SessionListActivity extends SherlockFragmentActivity implements
    /** Selected Session position */
    private int m_sessionPosition;
 
-   /**
-    * Code indicating the result came from an activity viewing a specific
-    * session
-    */
-   private int FROM_SESSION_CODE = 1;
+
 
    /**
     * Used to handle Contextual Action Mode when long-clicking on a session.
@@ -128,7 +124,7 @@ public class SessionListActivity extends SherlockFragmentActivity implements
             Intent intent = new Intent(context, SessionDetailsActivity.class);
             SessionView sView = (SessionView) view;
             intent.putExtra(INTENT_SESSION_ID, sView.getSession().getID());
-            startActivityForResult(intent, FROM_SESSION_CODE);
+            startActivity(intent);
 
          }
       });
@@ -281,8 +277,7 @@ public class SessionListActivity extends SherlockFragmentActivity implements
                                  Intent intent = new Intent(context,
                                        SessionDetailsActivity.class);
                                  intent.putExtra(INTENT_SESSION_ID, id);
-                                 startActivityForResult(intent,
-                                       FROM_SESSION_CODE);
+                                 startActivity(intent);
                               } else {
                                  Toast.makeText(
                                        context,
@@ -314,7 +309,7 @@ public class SessionListActivity extends SherlockFragmentActivity implements
                               Intent intent = new Intent(context,
                                     SessionDetailsActivity.class);
                               intent.putExtra(INTENT_SESSION_ID, id);
-                              startActivityForResult(intent, FROM_SESSION_CODE);
+                              startActivity(intent);
                            }
                         }).create().show();
 

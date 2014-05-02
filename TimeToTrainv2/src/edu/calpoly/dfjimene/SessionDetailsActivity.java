@@ -1,5 +1,6 @@
 package edu.calpoly.dfjimene;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,7 +11,9 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
@@ -41,8 +44,14 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
    /** View holding simple entries */
    private ListView m_simpleEntryList;
 
+   /** The activity's context */
+   private Context m_context;
+   
    /** Extras key for entry id */
    public static final String ENTRY_ID = "entry_id";
+   
+   /** Intent Session ID key string to pass in the intent */
+   public static final String SESSION_ID = "session_id";
 
    /** Uri String for querying for the session's title */
    private static final String SESSION_CONTENT_STRING = "content://edu.calpoly.dfjimene.data.contentprovider/sessions/session/";
@@ -62,6 +71,9 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
    /** CAB for deleting entries */
    private ActionMode m_actionMode;
    private Callback m_actionModeCallback;
+   
+   /** Button for adding an entry */
+   private Button m_buttonAdd;
 
    /** Content uri string for entries */
    private static final String ENTRY_CONTENT_STRING = TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
@@ -71,17 +83,19 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
-      m_sessionId = getIntent().getLongExtra(
+      this.m_sessionId = getIntent().getLongExtra(
             SessionListActivity.INTENT_SESSION_ID, -1);
       if (m_sessionId < 0)
          Log.e(this.getClass().getName(), "Negative session ID");
       changeTitleForSession(m_sessionId);
       this.m_simpleEntryAdapter = new SimpleEntryCursorAdapter(this, null, 0);
       getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-      m_simpleEntryAdapter.setOnSimpleEntryChangeListener(this);
+      this.m_simpleEntryAdapter.setOnSimpleEntryChangeListener(this);
       setContentView(R.layout.session_entry_list);
-      m_simpleEntryList = (ListView) findViewById(R.id.entry_list);
-      m_simpleEntryList.setAdapter(m_simpleEntryAdapter);
+      this.m_context = this;
+      this.m_simpleEntryList = (ListView) findViewById(R.id.entry_list);
+      this.m_simpleEntryList.setAdapter(m_simpleEntryAdapter);
+      this.m_buttonAdd = (Button) findViewById(R.id.view_add_entry);
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       initListeners();
 
@@ -97,7 +111,7 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
-      case R.id.menuhelp:
+      case R.id.details_help:
          Toast.makeText(
                this,
                "Please select an entry to view and modify."
@@ -116,6 +130,15 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
    }
 
    private void initListeners() {
+      this.m_buttonAdd.setOnClickListener(new OnClickListener() {
+         
+         @Override
+         public void onClick(View v) {
+            Intent i = new Intent(m_context, AddEntryActivity.class);
+            i.putExtra(SESSION_ID, m_sessionId);
+            startActivity(i);
+         }
+      });
       this.m_simpleEntryList
             .setOnItemLongClickListener(new OnItemLongClickListener() {
 

@@ -41,7 +41,7 @@
         </provider>
 
         <activity
-            android:name="edu.calpoly.dfjimene.SelectAndEditEntryActivity"
+            android:name="edu.calpoly.dfjimene.AddEntryActivity"
             android:label="@string/title_activity_select_and_edit_entry"
             android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity" >
             <meta-data

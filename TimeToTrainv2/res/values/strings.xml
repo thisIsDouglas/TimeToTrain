@@ -19,5 +19,17 @@
     <string name="add_entry">Tap to Add a New Exercise Entry</string>
     <string name="title_activity_select_and_edit_entry">SelectAndEditEntryActivity</string>
     <string name="delete_entry_title">Delete Entry</string>
+    <string name="entry_enter_a_name">Enter a Name for Your Exercise</string>
+    <string name="hint_exercise_name">Exercise Name</string>
+    <string name="select_entry_type">Select Entry Type</string>
+    <string name="strength">Strength</string>
+    <string name="cardio">Cardio</string>
+    <string name="next_string">Next</string>
+    <string name="add_cardio">Enter Cardio Information</string>
+    <string name="minutes">Minutes</string>
+    <string name="seconds">Seconds</string>
+    <string name="distance">Distance (mi)</string>
+    <string name="add_comment">Add a Note</string>
+    <string name="strength_hint">Tap Next to Add Your First Set</string>
 
 </resources>
