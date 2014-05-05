@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -31,6 +32,7 @@ import edu.calpoly.dfjimene.exerciseentry.SimpleEntry;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntryCursorAdapter;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntryView;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntryView.OnSimpleEntryChangeListener;
+import edu.calpoly.dfjimene.session.SessionView;
 
 public class SessionDetailsActivity extends SherlockFragmentActivity implements
       LoaderCallbacks<Cursor>, OnSimpleEntryChangeListener {
@@ -201,6 +203,19 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
             }
          }
       };
+      this.m_simpleEntryList.setOnItemClickListener(new OnItemClickListener() {
+
+         @Override
+         public void onItemClick(AdapterView<?> parent, View view,
+               int position, long id) {
+            Intent intent = new Intent(m_context, ViewEntryActivity.class);
+            SimpleEntryView sView = (SimpleEntryView) view;
+            intent.putExtra("entry", sView.getSimpleEntry().getEntryID());
+            intent.putExtra("session", sView.getSimpleEntry().getSessionID());
+            startActivity(intent);
+            
+         }
+      });
    }
 
    private void changeTitleForSession(long sessionId) {

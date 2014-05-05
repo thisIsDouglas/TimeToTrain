@@ -1,13 +1,21 @@
 package edu.calpoly.dfjimene;
 
+import org.json.JSONObject;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import edu.calpoly.dfjimene.data.TimeToTrainContentProvider;
+import edu.calpoly.dfjimene.data.TimeToTrainTables;
+
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -32,7 +40,7 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 
    /** Edit text for the exercise name */
    private EditText m_exerciseName;
-   
+
    /** Edit texts for time and distance */
    private EditText m_distance;
    private EditText m_timeSeconds;
@@ -62,7 +70,7 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
       inflater.inflate(R.menu.add_entry_menu, menu);
       return true;
    }
-   
+
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
@@ -70,24 +78,26 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
          addNewEntry();
          return true;
       case android.R.id.home:
-         NavUtils.navigateUpTo(this,
-               new Intent(this, SessionListActivity.class));
+         Intent i = new Intent(this, SessionDetailsActivity.class);
+         i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
+         NavUtils.navigateUpTo(this, i);
+         finish();
          return true;
 
       default:
          return super.onOptionsItemSelected(item);
       }
    }
-   
+
    private void initLayout() {
       setContentView(R.layout.add_entry_view);
       setTitle("Add New Entry");
       LayoutInflater inflater = getLayoutInflater();
       m_cardioLayout = (LinearLayout) inflater.inflate(
             R.layout.add_entry_cardio_append, null);
-      m_distance = (EditText)m_cardioLayout.findViewById(R.id.edit_distance);
-      m_timeMinutes = (EditText)m_cardioLayout.findViewById(R.id.edit_minutes);
-      m_timeSeconds = (EditText)m_cardioLayout.findViewById(R.id.edit_seconds);
+      m_distance = (EditText) m_cardioLayout.findViewById(R.id.edit_distance);
+      m_timeMinutes = (EditText) m_cardioLayout.findViewById(R.id.edit_minutes);
+      m_timeSeconds = (EditText) m_cardioLayout.findViewById(R.id.edit_seconds);
       m_radioGroup = (RadioGroup) findViewById(R.id.group_exercise_type);
       m_radioGroup.check(R.id.radio_strength);
       m_exerciseName = (EditText) findViewById(R.id.edit_entry_name);
@@ -115,10 +125,124 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 
    }
 
-   private void addNewEntry(){
-      
+   private void addNewEntry() {
+      ContentValues values = new ContentValues();
+      if (m_exerciseName.getText().toString().equals("")) {
+         Toast.makeText(this, "Please enter an exercise name",
+               Toast.LENGTH_SHORT).show();
+         return;
+      }
+      if (m_selected == CARDIO) {
+         Integer min = Integer.getInteger(m_timeMinutes.getText().toString());
+         Integer sec = Integer.getInteger(m_timeSeconds.getText().toString());
+         Double dist;
+         try {
+            dist = Double.parseDouble(m_distance.getText().toString());
+         } catch (NumberFormatException e) {
+            dist = null;
+         }
+         int time;
+         if (min == null && sec == null && dist == null)
+            return;
+         else {
+            values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_DISTANCE, dist);
+            time = (min == null ? 0 : min.intValue()) * 60
+                  + (sec == null ? 0 : sec.intValue());
+            values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TIME,
+                  (time == 0 ? null : time));
+            values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE, "cardio");
+            values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME,
+                  m_exerciseName.getText().toString());
+            values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SESSION_ID,
+                  m_sessionId);
+            Uri uri = Uri
+                  .parse(TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
+                        + "/entry/0");
+            uri = getContentResolver().insert(uri, values);
+            if (uri == null)
+               Log.e(AddEntryActivity.class.getName(), "Null? Why?");
+            String str = uri.getLastPathSegment();
+            if (str == null) {
+               Log.e(AddEntryActivity.class.getName(),
+                     "Null string makes no sense");
+               Intent i = new Intent(this, SessionDetailsActivity.class);
+               i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
+               NavUtils.navigateUpTo(this, i);
+               finish();
+               return;
+            }
+            long entryId;
+            try {
+               entryId = Long.parseLong(str);
+            } catch (NumberFormatException e) {
+               Log.e(AddEntryActivity.class.getName(),
+                     "Formatted incorrectly somehow...");
+               Intent i = new Intent(this, SessionDetailsActivity.class);
+               i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
+               NavUtils.navigateUpTo(this, i);
+               finish();
+               return;
+            }
+            Intent i = new Intent(this, ViewEntryActivity.class);
+            i.putExtra("type", "cardio");
+            i.putExtra("session", m_sessionId);
+            i.putExtra("entry", entryId);
+            startActivity(i);
+            m_distance.setText("");
+            m_timeMinutes.setText("");
+            m_timeSeconds.setText("");
+            m_exerciseName.setText("");
+            finish();
+         }
+      } else {
+         values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SETS,
+               new JSONObject().toString());
+         values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE, "strength");
+         values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME,
+               m_exerciseName.getText().toString());
+         values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SESSION_ID,
+               m_sessionId);
+         Uri uri = Uri
+               .parse(TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
+                     + "/entry/0");
+         uri = getContentResolver().insert(uri, values);
+         if (uri == null)
+            Log.e(AddEntryActivity.class.getName(), "Null? Why?");
+         String str = uri.getLastPathSegment();
+         if (str == null) {
+            Log.e(AddEntryActivity.class.getName(),
+                  "Null string makes no sense");
+            Intent i = new Intent(this, SessionDetailsActivity.class);
+            i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
+            NavUtils.navigateUpTo(this, i);
+            finish();
+            return;
+         }
+         long entryId;
+         try {
+            entryId = Long.parseLong(str);
+         } catch (NumberFormatException e) {
+            Log.e(AddEntryActivity.class.getName(),
+                  "Formatted incorrectly somehow...");
+            Intent i = new Intent(this, SessionDetailsActivity.class);
+            i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
+            NavUtils.navigateUpTo(this, i);
+            finish();
+            return;
+         }
+         Intent i = new Intent(this, ViewEntryActivity.class);
+         i.putExtra("type", "strength");
+         i.putExtra("session", m_sessionId);
+         i.putExtra("entry", entryId);
+         startActivity(i);
+         m_distance.setText("");
+         m_timeMinutes.setText("");
+         m_timeSeconds.setText("");
+         m_exerciseName.setText("");
+         finish();
+      }
    }
-   
+
    private void alterLayout(int type) {
       LinearLayout layout;
       if (m_selected == CARDIO && (type == STRENGTH || type == UNCHECKED)) {

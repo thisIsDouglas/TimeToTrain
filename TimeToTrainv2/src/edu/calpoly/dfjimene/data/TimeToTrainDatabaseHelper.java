@@ -11,7 +11,7 @@ public class TimeToTrainDatabaseHelper extends SQLiteOpenHelper{
    public static final String DB_NAME = "timetotrain.db";
    
    /** Database version */
-   public static final int DB_VER = 2;
+   public static final int DB_VER = 3;
    
    /**
     * Create a helper object to create, open, and/or manage a database.

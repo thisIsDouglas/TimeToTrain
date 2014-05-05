@@ -31,5 +31,13 @@
     <string name="distance">Distance (mi)</string>
     <string name="add_comment">Add a Note</string>
     <string name="strength_hint">Tap Next to Add Your First Set</string>
+    <string name="title_activity_view_entry">ViewEntryActivity</string>
+    <string name="cardio_records">Your Cardio Entry Record</string>
+    <string name="your_time">Your Time (If any)</string>
+    <string name="your_distance">Your Distance (if any)</string>
+    <string name="notes">Notes</string>
+    <string name="add_a_note">Add a Note</string>
+    <string name="type_your_note">Enter your Note</string>
+    <string name="strength_records">Your Strength Entry Record Sets</string>
 
 </resources>

@@ -16,8 +16,8 @@
         <activity
             android:name="edu.calpoly.dfjimene.SessionListActivity"
             android:configChanges="orientation"
-            android:launchMode="singleTask"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,6 +43,14 @@
         <activity
             android:name="edu.calpoly.dfjimene.AddEntryActivity"
             android:label="@string/title_activity_select_and_edit_entry"
+            android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.calpoly.dfjimene.SessionDetailsActivity" />
+        </activity>
+        <activity
+            android:name="edu.calpoly.dfjimene.ViewEntryActivity"
+            android:label="@string/title_activity_view_entry"
             android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
