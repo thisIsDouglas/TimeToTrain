@@ -28,11 +28,11 @@ import com.actionbarsherlock.view.MenuItem;
 
 import edu.calpoly.dfjimene.data.TimeToTrainContentProvider;
 import edu.calpoly.dfjimene.data.TimeToTrainTables;
+import edu.calpoly.dfjimene.exerciseentry.ExerciseEntry;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntry;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntryCursorAdapter;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntryView;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntryView.OnSimpleEntryChangeListener;
-import edu.calpoly.dfjimene.session.SessionView;
 
 public class SessionDetailsActivity extends SherlockFragmentActivity implements
       LoaderCallbacks<Cursor>, OnSimpleEntryChangeListener {
@@ -48,10 +48,10 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
 
    /** The activity's context */
    private Context m_context;
-   
+
    /** Extras key for entry id */
    public static final String ENTRY_ID = "entry_id";
-   
+
    /** Intent Session ID key string to pass in the intent */
    public static final String SESSION_ID = "session_id";
 
@@ -73,7 +73,7 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
    /** CAB for deleting entries */
    private ActionMode m_actionMode;
    private Callback m_actionModeCallback;
-   
+
    /** Button for adding an entry */
    private Button m_buttonAdd;
 
@@ -117,8 +117,8 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
          Toast.makeText(
                this,
                "Please select an entry to view and modify."
-                     + "To delete an existing entry, tap and hold the entry" +
-                     " you no longer want and tap \"Delete Entry\"",
+                     + "To delete an existing entry, tap and hold the entry"
+                     + " you no longer want and tap \"Delete Entry\"",
                Toast.LENGTH_LONG).show();
          return true;
       case android.R.id.home:
@@ -133,7 +133,7 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
 
    private void initListeners() {
       this.m_buttonAdd.setOnClickListener(new OnClickListener() {
-         
+
          @Override
          public void onClick(View v) {
             Intent i = new Intent(m_context, AddEntryActivity.class);
@@ -208,12 +208,19 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
          @Override
          public void onItemClick(AdapterView<?> parent, View view,
                int position, long id) {
-            Intent intent = new Intent(m_context, ViewEntryActivity.class);
             SimpleEntryView sView = (SimpleEntryView) view;
+            Intent intent;
+            if (sView.getSimpleEntry().getType() == ExerciseEntry.TYPE_CARDIO) {
+               intent = new Intent(m_context,
+                     ViewCardioEntryActivity.class);
+            } else {
+               intent = new Intent(m_context,
+                     ViewStrengthEntryActivity.class);
+            }
             intent.putExtra("entry", sView.getSimpleEntry().getEntryID());
             intent.putExtra("session", sView.getSimpleEntry().getSessionID());
             startActivity(intent);
-            
+
          }
       });
    }
@@ -235,6 +242,7 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
          setTitle(newTitle);
       else
          setTitle(cursor.getString(TimeToTrainTables.SESSIONS_COL_DATE));
+      cursor.close();
    }
 
    public void fillData() {
@@ -253,7 +261,8 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
    public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
       String projection[] = { TimeToTrainTables.EXERCISE_ENTRIES_KEY_ID,
             TimeToTrainTables.EXERCISE_ENTRIES_KEY_SESSION_ID,
-            TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME };
+            TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME,
+            TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE };
       Uri uri = Uri.parse(SIMPLE_ENTRY_CONTENT_STRING + m_sessionId);
       CursorLoader loader = new CursorLoader(this, uri, projection, null, null,
             null);

@@ -20,7 +20,7 @@ public class TimeToTrainTables {
    
    // Foreign Key to Exercise table
    public static final String EXERCISE_ENTRIES_KEY_EXERCISE_NAME = "exercise_name";
-   public static final int EXERCISE_ENTRIES_COL_EXERCISE_ID = EXERCISE_ENTRIES_COL_ID + 2;
+   public static final int EXERCISE_ENTRIES_COL_EXERCISE_NAME = EXERCISE_ENTRIES_COL_ID + 2;
    
    // Foreign Key to Session table
    public static final String EXERCISE_ENTRIES_KEY_SESSION_ID = "session_id";
@@ -34,19 +34,19 @@ public class TimeToTrainTables {
    public static final int EXERCISE_ENTRIES_COL_REPS = EXERCISE_ENTRIES_COL_ID + 4;
    */
    public static final String EXERCISE_ENTRIES_KEY_SETS = "sets";
-   public static final int EXERCISE_ENTRIES_COL_SETS = EXERCISE_ENTRIES_COL_ID + 5;
+   public static final int EXERCISE_ENTRIES_COL_SETS = EXERCISE_ENTRIES_COL_ID + 4;
    
    /*public static final String EXERCISE_ENTRIES_KEY_WEIGHT = "weight";
    public static final int EXERCISE_ENTRIES_COL_WEIGHT = EXERCISE_ENTRIES_COL_ID + 6;
 */
    public static final String EXERCISE_ENTRIES_KEY_TIME = "time";
-   public static final int EXERCISE_ENTRIES_COL_TIME = EXERCISE_ENTRIES_COL_ID + 7;
+   public static final int EXERCISE_ENTRIES_COL_TIME = EXERCISE_ENTRIES_COL_ID + 5;
    
    public static final String EXERCISE_ENTRIES_KEY_DISTANCE = "distance";
-   public static final int EXERCISE_ENTRIES_COL_DISTANCE = EXERCISE_ENTRIES_COL_ID + 8;
+   public static final int EXERCISE_ENTRIES_COL_DISTANCE = EXERCISE_ENTRIES_COL_ID + 6;
    
    public static final String EXERCISE_ENTRIES_KEY_COMMENT = "comments";
-   public static final int EXERCISE_ENTRIES_COL_COMMENT = EXERCISE_ENTRIES_COL_ID + 9;
+   public static final int EXERCISE_ENTRIES_COL_COMMENT = EXERCISE_ENTRIES_COL_ID + 7;
    
    /** Column names and IDs for Exercises Table 
    public static final String EXERCISES_KEY_ID = "_id";
@@ -83,6 +83,8 @@ public class TimeToTrainTables {
    // Exercise name
    public static final int SIMPLE_ENTRIES_COL_EXERCISE_NAME = SIMPLE_ENTRIES_COL_ID + 2;
    
+   public static final int SIMPLE_ENTRIES_COL_TYPE = SIMPLE_ENTRIES_COL_ID + 3;
+   
    // Exercise variant
    // public static final int SIMPLE_ENTRIES_COL_EXERCISE_VARIANT = SIMPLE_ENTRIES_COL_ID + 4;
    
@@ -92,7 +94,7 @@ public class TimeToTrainTables {
          EXERCISE_ENTRIES_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
          EXERCISE_ENTRIES_KEY_SESSION_ID + " INTEGER NOT NULL, " +
          EXERCISE_ENTRIES_KEY_EXERCISE_NAME + " TEXT NOT NULL, " +
-         EXERCISE_ENTRIES_KEY_TYPE + " TEXT NOT NULL, " +
+         EXERCISE_ENTRIES_KEY_TYPE + " INTEGER NOT NULL, " +
          EXERCISE_ENTRIES_KEY_SETS + " TEXT DEFAULT 0, " +
          EXERCISE_ENTRIES_KEY_TIME + " INTEGER DEFAULT 0, " +
          EXERCISE_ENTRIES_KEY_DISTANCE + " REAL DEFAULT 0, " +

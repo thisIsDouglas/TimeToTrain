@@ -5,6 +5,7 @@ import edu.calpoly.dfjimene.exerciseentry.SimpleEntryView.OnSimpleEntryChangeLis
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,7 +13,7 @@ public class SimpleEntryCursorAdapter extends CursorAdapter {
 
    /** Listener for when a SimpleEntry View changes */
    private OnSimpleEntryChangeListener m_listener;
-   
+
    /**
     * Constructor that takes in the application Context in which it is being
     * used and the Collection of SimpleEntry objects to which it is bound.
@@ -37,17 +38,20 @@ public class SimpleEntryCursorAdapter extends CursorAdapter {
     *           The OnSessionChangeListener that will be notified when a session
     *           changes.
     */
-   public void setOnSimpleEntryChangeListener(OnSimpleEntryChangeListener mListener) {
+   public void setOnSimpleEntryChangeListener(
+         OnSimpleEntryChangeListener mListener) {
       this.m_listener = mListener;
    }
-   
+
    @Override
    public void bindView(View arg0, Context arg1, Cursor arg2) {
       SimpleEntry entry;
       entry = new SimpleEntry(
             arg2.getLong(TimeToTrainTables.SIMPLE_ENTRIES_COL_SESSION_ID),
             arg2.getString(TimeToTrainTables.SIMPLE_ENTRIES_COL_EXERCISE_NAME),
-            arg2.getLong(TimeToTrainTables.SIMPLE_ENTRIES_COL_ID));
+            arg2.getLong(TimeToTrainTables.SIMPLE_ENTRIES_COL_ID),
+                  arg2.getInt(TimeToTrainTables.SIMPLE_ENTRIES_COL_TYPE));
+      Log.i(SimpleEntryCursorAdapter.class.getName(), entry.getExerciseName() + " " + entry.getType());
       SimpleEntryView view = (SimpleEntryView) arg0;
       view.setOnSimpleEntryChangeListener(null);
       view.setSimpleEntry(entry);
@@ -61,10 +65,12 @@ public class SimpleEntryCursorAdapter extends CursorAdapter {
       entry = new SimpleEntry(
             arg1.getLong(TimeToTrainTables.SIMPLE_ENTRIES_COL_SESSION_ID),
             arg1.getString(TimeToTrainTables.SIMPLE_ENTRIES_COL_EXERCISE_NAME),
-            arg1.getLong(TimeToTrainTables.SIMPLE_ENTRIES_COL_ID));
+            arg1.getLong(TimeToTrainTables.SIMPLE_ENTRIES_COL_ID),
+            arg1.getInt(TimeToTrainTables.SIMPLE_ENTRIES_COL_TYPE));
+      Log.i(SimpleEntryCursorAdapter.class.getName(), entry.getExerciseName() + " " + entry.getType());
       SimpleEntryView view = new SimpleEntryView(arg0, entry);
       view.setOnSimpleEntryChangeListener(this.m_listener);
-      
+
       return view;
    }
 

@@ -917,7 +917,7 @@ containing a value of this type.
         public static final int ic_menu_forward=0x7f020072;
     }
     public static final class id {
-        public static final int EntryText=0x7f04004c;
+        public static final int EntryText=0x7f040050;
         public static final int SessionText=0x7f04004a;
         public static final int abs__action_bar=0x7f040020;
         public static final int abs__action_bar_container=0x7f04001f;
@@ -958,18 +958,22 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int add_cardio_note=0x7f040054;
-        public static final int add_cardio_notes=0x7f040053;
+        public static final int add_cardio_note=0x7f04005c;
+        public static final int add_cardio_notes=0x7f04005a;
         public static final int add_cardio_view=0x7f040033;
         public static final int add_entry_linear=0x7f04003b;
+        public static final int add_strength_set=0x7f040061;
+        public static final int add_strength_set_container=0x7f040060;
+        public static final int after_listview_scroll=0x7f04003a;
         public static final int cardio_append=0x7f040032;
-        public static final int cardio_dist_view=0x7f040051;
-        public static final int cardio_entry_stats=0x7f04004d;
-        public static final int cardio_notes=0x7f040052;
-        public static final int cardio_time_view=0x7f04004f;
-        public static final int delete_entry=0x7f040057;
-        public static final int delete_session=0x7f04005a;
-        public static final int details_help=0x7f040058;
+        public static final int cardio_dist_view=0x7f040058;
+        public static final int cardio_entry_stats=0x7f040054;
+        public static final int cardio_note_view=0x7f04005b;
+        public static final int cardio_notes=0x7f040059;
+        public static final int cardio_time_view=0x7f040056;
+        public static final int delete_entry=0x7f040063;
+        public static final int delete_session=0x7f040066;
+        public static final int details_help=0x7f040064;
         public static final int disableHome=0x7f040009;
         public static final int distance_text=0x7f040036;
         public static final int edit_distance=0x7f040039;
@@ -978,37 +982,45 @@ containing a value of this type.
         public static final int edit_note=0x7f040043;
         public static final int edit_query=0x7f040026;
         public static final int edit_seconds=0x7f040038;
-        public static final int edit_session=0x7f040059;
+        public static final int edit_session=0x7f040065;
         public static final int edit_session_name=0x7f040045;
         public static final int entry_list=0x7f040047;
         public static final int group_exercise_type=0x7f04003f;
         public static final int homeAsUp=0x7f040006;
         public static final int imageView1=0x7f04004b;
         public static final int listMode=0x7f040002;
-        public static final int menu_next=0x7f040056;
-        public static final int menuhelp=0x7f04005b;
+        public static final int menu_next=0x7f040062;
+        public static final int menuhelp=0x7f040067;
         public static final int minutes_text=0x7f040034;
         public static final int normal=0x7f040001;
         public static final int radio_cardio=0x7f040041;
+        public static final int radio_kg=0x7f040052;
+        public static final int radio_lb=0x7f040053;
         public static final int radio_strength=0x7f040040;
-        public static final int scrollView1=0x7f04003a;
+        public static final int reps_for_set=0x7f04004f;
+        public static final int reps_view=0x7f04005e;
         public static final int seconds_text=0x7f040035;
         public static final int session_name=0x7f040044;
         public static final int sessions_list=0x7f040049;
+        public static final int set_num_title=0x7f04004c;
+        public static final int sets_list_view=0x7f04005f;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
-        public static final int strength_entry_stats=0x7f040055;
+        public static final int strength_entry_stats=0x7f04005d;
         public static final int strength_tip=0x7f040042;
         public static final int tabMode=0x7f040003;
+        public static final int units_for_set=0x7f04004e;
+        public static final int units_grp=0x7f040051;
         public static final int useLogo=0x7f040004;
         public static final int view_add_entry=0x7f040046;
         public static final int view_add_session=0x7f040048;
         public static final int view_enter_name=0x7f04003c;
         public static final int view_select_type_text=0x7f04003e;
+        public static final int weight_title=0x7f04004d;
         public static final int wrap_content=0x7f040000;
-        public static final int your_distance=0x7f040050;
-        public static final int your_time=0x7f04004e;
+        public static final int your_distance=0x7f040057;
+        public static final int your_time=0x7f040055;
     }
     public static final class integer {
         public static final int abs__max_action_buttons=0x7f080000;
@@ -1047,8 +1059,9 @@ containing a value of this type.
         public static final int sherlock_spinner_dropdown_item=0x7f03001e;
         public static final int sherlock_spinner_item=0x7f03001f;
         public static final int simple_entry_view=0x7f030020;
-        public static final int view_entry_cardio=0x7f030021;
-        public static final int view_entry_strength=0x7f030022;
+        public static final int str_entry_add_set=0x7f030021;
+        public static final int view_entry_cardio=0x7f030022;
+        public static final int view_entry_strength=0x7f030023;
     }
     public static final class menu {
         public static final int add_entry_menu=0x7f0b0000;
@@ -1099,6 +1112,7 @@ containing a value of this type.
         public static final int abs__shareactionprovider_share_with_application=0x7f090007;
         public static final int action_settings=0x7f09000f;
         public static final int add_a_note=0x7f090030;
+        public static final int add_a_set=0x7f090035;
         public static final int add_cardio=0x7f090025;
         public static final int add_comment=0x7f090029;
         public static final int add_entry=0x7f09001c;
@@ -1116,10 +1130,13 @@ containing a value of this type.
         public static final int entry_enter_a_name=0x7f09001f;
         public static final int hello_world=0x7f09000e;
         public static final int hint_exercise_name=0x7f090020;
+        public static final int kg=0x7f090036;
+        public static final int lb=0x7f090037;
         public static final int menu_help=0x7f090016;
         public static final int minutes=0x7f090026;
         public static final int next_string=0x7f090024;
         public static final int notes=0x7f09002f;
+        public static final int reps=0x7f090033;
         public static final int seconds=0x7f090027;
         public static final int select_entry_type=0x7f090021;
         public static final int session_add_hint=0x7f090014;
@@ -1131,8 +1148,10 @@ containing a value of this type.
         public static final int strength_records=0x7f090032;
         public static final int title_activity_select_and_edit_entry=0x7f09001d;
         public static final int title_activity_session_details=0x7f09001b;
+        public static final int title_activity_view_cardio_entry=0x7f090038;
         public static final int title_activity_view_entry=0x7f09002b;
         public static final int type_your_note=0x7f090031;
+        public static final int weight=0x7f090034;
         public static final int your_distance=0x7f09002e;
         public static final int your_time=0x7f09002d;
     }

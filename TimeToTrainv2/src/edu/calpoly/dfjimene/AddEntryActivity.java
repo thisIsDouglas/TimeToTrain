@@ -9,6 +9,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import edu.calpoly.dfjimene.data.TimeToTrainContentProvider;
 import edu.calpoly.dfjimene.data.TimeToTrainTables;
+import edu.calpoly.dfjimene.exerciseentry.ExerciseEntry;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -133,8 +134,8 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
          return;
       }
       if (m_selected == CARDIO) {
-         Integer min = Integer.getInteger(m_timeMinutes.getText().toString());
-         Integer sec = Integer.getInteger(m_timeSeconds.getText().toString());
+         Integer min = Integer.parseInt(m_timeMinutes.getText().toString());
+         Integer sec = Integer.parseInt(m_timeSeconds.getText().toString());
          Double dist;
          try {
             dist = Double.parseDouble(m_distance.getText().toString());
@@ -150,7 +151,7 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
                   + (sec == null ? 0 : sec.intValue());
             values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TIME,
                   (time == 0 ? null : time));
-            values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE, "cardio");
+            values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE, ExerciseEntry.TYPE_CARDIO);
             values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME,
                   m_exerciseName.getText().toString());
             values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SESSION_ID,
@@ -183,8 +184,7 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
                finish();
                return;
             }
-            Intent i = new Intent(this, ViewEntryActivity.class);
-            i.putExtra("type", "cardio");
+            Intent i = new Intent(this, ViewCardioEntryActivity.class);
             i.putExtra("session", m_sessionId);
             i.putExtra("entry", entryId);
             startActivity(i);
@@ -197,11 +197,12 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
       } else {
          values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SETS,
                new JSONObject().toString());
-         values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE, "strength");
+         values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE, ExerciseEntry.TYPE_STRENGTH);
          values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME,
                m_exerciseName.getText().toString());
          values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SESSION_ID,
                m_sessionId);
+
          Uri uri = Uri
                .parse(TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
                      + "/entry/0");
@@ -230,8 +231,7 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
             finish();
             return;
          }
-         Intent i = new Intent(this, ViewEntryActivity.class);
-         i.putExtra("type", "strength");
+         Intent i = new Intent(this, ViewStrengthEntryActivity.class);
          i.putExtra("session", m_sessionId);
          i.putExtra("entry", entryId);
          startActivity(i);

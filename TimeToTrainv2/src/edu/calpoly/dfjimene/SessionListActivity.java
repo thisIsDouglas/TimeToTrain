@@ -7,7 +7,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.ActionMode.Callback;
 
-import edu.calpoly.dfjimene.data.TimeToTrainContentProvider;
 import edu.calpoly.dfjimene.data.TimeToTrainTables;
 import edu.calpoly.dfjimene.session.Session;
 import edu.calpoly.dfjimene.session.SessionCursorAdapter;

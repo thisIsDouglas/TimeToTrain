@@ -21,9 +21,9 @@ public class SimpleEntry {
 
    /** Session ID */
    private long m_sessionID;
-   
-   /** Variant of exercise */
-   //private String m_variant;
+
+   /** Type of exercise */
+   private int m_nType;
 
    /**
     * Default constructor for SimpleEntry
@@ -36,17 +36,24 @@ public class SimpleEntry {
    /**
     * Constructor for the SimpleEntry setting all IDs and the exercise name for
     * the view to use
-    * @param nSessionID the session ID
-    * @param nExerciseID the exercise ID
-    * @param strExerciseName the exercise name
-    * @param variant the variant of exercise (if any)
-    * @param nEntryID the ID of the entry
+    * 
+    * @param nSessionID
+    *           the session ID
+    * @param nExerciseID
+    *           the exercise ID
+    * @param strExerciseName
+    *           the exercise name
+    * @param variant
+    *           the variant of exercise (if any)
+    * @param nEntryID
+    *           the ID of the entry
     */
-   public SimpleEntry(long nSessionID,
-         String strExerciseName, long nEntryID) {
+   public SimpleEntry(long nSessionID, String strExerciseName, long nEntryID,
+         int type) {
       this.m_entryID = nEntryID;
       this.setExerciseName(strExerciseName);
       this.setSessionID(nSessionID);
+      this.setType(type);
    }
 
    public long getEntryID() {
@@ -75,5 +82,12 @@ public class SimpleEntry {
       return m_sessionID;
    }
 
+   public int getType() {
+      return m_nType;
+   }
+
+   public void setType(int m_nType) {
+      this.m_nType = m_nType;
+   }
 
 }

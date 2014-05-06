@@ -33,11 +33,17 @@
     <string name="strength_hint">Tap Next to Add Your First Set</string>
     <string name="title_activity_view_entry">ViewEntryActivity</string>
     <string name="cardio_records">Your Cardio Entry Record</string>
-    <string name="your_time">Your Time (If any)</string>
-    <string name="your_distance">Your Distance (if any)</string>
+    <string name="your_time">Your Time</string>
+    <string name="your_distance">Your Distance</string>
     <string name="notes">Notes</string>
     <string name="add_a_note">Add a Note</string>
     <string name="type_your_note">Enter your Note</string>
     <string name="strength_records">Your Strength Entry Record Sets</string>
+    <string name="reps">Reps</string>
+    <string name="weight">Weight</string>
+    <string name="add_a_set">Add a Set</string>
+    <string name="kg">kg</string>
+    <string name="lb">lb</string>
+    <string name="title_activity_view_cardio_entry">ViewCardioEntry</string>
 
 </resources>
