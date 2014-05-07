@@ -45,5 +45,7 @@
     <string name="kg">kg</string>
     <string name="lb">lb</string>
     <string name="title_activity_view_cardio_entry">ViewCardioEntry</string>
+    <string name="submit">Submit</string>
+    <string name="ok_button">OK</string>
 
 </resources>
