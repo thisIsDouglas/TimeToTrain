@@ -12,17 +12,19 @@
         android:id="@+id/SessionText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="0.89"
         android:clickable="false"
         android:focusable="false"
         android:gravity="center_vertical"
         android:text="TextView"
-        android:textSize="16sp" />
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
+        android:layout_gravity="center"
         android:layout_weight="0.11"
         android:clickable="false"
         android:focusable="false"

@@ -8,6 +8,7 @@ import edu.calpoly.dfjimene.data.TimeToTrainTables;
 import edu.calpoly.dfjimene.exerciseentry.ExerciseEntry;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,7 +17,11 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.KeyEvent;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -177,10 +182,32 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
          LinearLayout layout = (LinearLayout)inflater.inflate(R.layout.add_note, null);
          m_editor = (EditText) layout.findViewById(R.id.edit_note);
          layout.removeAllViews();
+         m_editor.setOnKeyListener(new OnKeyListener() {
+             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                 if (event.getAction() == KeyEvent.ACTION_DOWN
+                       && (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    submitEditedNote();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(m_editor.getWindowToken(), 0);
+                    return true;
+                 }
+                 if (event.getAction() == KeyEvent.ACTION_UP
+                       && keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(m_editor.getWindowToken(), 0);
+                    return true;
+                 }
+                 return false;
+              }
+           });
+         m_editor.setImeOptions(EditorInfo.IME_ACTION_DONE);
+         m_editor.setSingleLine(true);
       }
       m_noteLayout.addView(m_editor);
       m_addNoteButton.setText("Submit");
       m_addNoteButton.setOnClickListener(m_submitNewNoteListener);
+      m_editor.requestFocus();
+      
    }
 
    public void submitEditedNote() {
