@@ -51,7 +51,8 @@
         <activity
             android:name="edu.calpoly.dfjimene.ViewStrengthEntryActivity"
             android:label="@string/title_activity_view_entry"
-            android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity" >
+            android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity"
+            android:windowSoftInputMode="adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.calpoly.dfjimene.SessionDetailsActivity" />
@@ -59,7 +60,8 @@
         <activity
             android:name="edu.calpoly.dfjimene.ViewCardioEntryActivity"
             android:label="@string/title_activity_view_cardio_entry"
-            android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity" >
+            android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity"
+            android:windowSoftInputMode="adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.calpoly.dfjimene.SessionDetailsActivity" />

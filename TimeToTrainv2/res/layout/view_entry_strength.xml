@@ -1,92 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/strength_entry_stats"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/strength_records"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:layout_height="wrap_content" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/weight_title"
-            android:layout_width="0dp"
+            android:id="@+id/strength_entry_stats"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:gravity="center"
-            android:text="@string/weight"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/reps_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:gravity="center"
-            android:text="@string/reps"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/sets_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
-
-    <ScrollView
-        android:id="@+id/after_listview_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+            android:padding="10dp"
+            android:text="@string/strength_records"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:padding="5dp" >
 
-
-            <LinearLayout
-                android:id="@+id/add_strength_set_container"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/weight_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
-            </LinearLayout>
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="@string/weight"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/reps_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="@string/reps"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/add_strength_set_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <Button
                 android:id="@+id/add_strength_set"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_a_set" />
-            
-            <TextView
-                android:id="@+id/cardio_notes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/notes" />
-
-            <LinearLayout
-                android:id="@+id/add_cardio_notes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/add_cardio_note"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add_a_note" />
 
         </LinearLayout>
-    </ScrollView>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/strength_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/notes" />
+
+        <LinearLayout
+            android:id="@+id/strength_notes_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/strength_note_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="TextView" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/add_strength_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_a_note" />
+    </LinearLayout>
+
+</ScrollView>

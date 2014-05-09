@@ -171,7 +171,7 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 		}
 		if (m_entry.getComments() != null) {
 			m_noteView = (TextView) findViewById(R.id.cardio_note_view);
-			m_noteLayout = (LinearLayout) m_noteView.getParent();
+			m_noteLayout = (LinearLayout) findViewById(R.id.add_cardio_notes);
 			m_noteView.setText(m_entry.getComments());
 			m_addNoteButton = (Button) findViewById(R.id.add_cardio_note);
 			m_addNoteButton.setText("Edit Note");
