@@ -3,6 +3,7 @@ package edu.calpoly.dfjimene;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,10 +16,13 @@ import edu.calpoly.dfjimene.data.TimeToTrainContentProvider;
 import edu.calpoly.dfjimene.data.TimeToTrainTables;
 import edu.calpoly.dfjimene.exerciseentry.ExerciseEntry;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -34,6 +38,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
@@ -107,6 +112,9 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		@Override
 		public void onClick(View v) {
 			submitEditedNote();
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(m_editor.getWindowToken(),
+					0);
 		}
 	};
 
@@ -133,6 +141,10 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		@Override
 		public void onClick(View v) {
 			submitNewSet();
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			EditText view = (EditText)m_editSetLayout.findViewById(R.id.edit_reps);
+			imm.hideSoftInputFromWindow(view.getWindowToken(),
+					0);
 		}
 	};
 
@@ -197,12 +209,30 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		cursor.close();
 	}
 
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
 	public void initStrengthView() {
+		Resources res = getResources();
+		Random rand = new Random();
+		Drawable img;
+		if (rand.nextInt() % 2 == 0) {
+			img = res.getDrawable(R.drawable.strength_1);
+		}
+		else{
+			img = res.getDrawable(R.drawable.strength_2);
+		}
+		img.setAlpha(45);
 		setTitle(m_entry.getExreciseName());
 		setContentView(R.layout.view_entry_strength);
 		m_noteLayout = (LinearLayout) findViewById(R.id.strength_notes_layout);
 		m_setLayout = (LinearLayout) findViewById(R.id.add_strength_set_container);
 		m_mainLayout = (LinearLayout) m_noteLayout.getParent();
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+			((ScrollView) m_mainLayout.getParent()).setBackgroundDrawable(img);
+		} else {
+			((ScrollView) m_mainLayout.getParent()).setBackground(img);
+		}
 		m_addSetButton = (Button) findViewById(R.id.add_strength_set);
 		m_setLayout.removeAllViews();
 		if (m_entry.getComments() != null) {
@@ -390,7 +420,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			m_submitSet = (Button) m_editSetLayout
 					.findViewById(R.id.confirm_set);
 			m_submitSet.setOnClickListener(m_submitSetListener);
-			m_editSetGroup = (RadioGroup) m_editSetLayout.findViewById(R.id.units_group);
+			m_editSetGroup = (RadioGroup) m_editSetLayout
+					.findViewById(R.id.units_group);
 			m_editSetGroup
 					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -471,7 +502,7 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			JSONArray jsonArr = new JSONArray();
 			for (Map<String, String> m : m_listSets) {
 				JSONObject arrObj = new JSONObject();
-				
+
 				arrObj.put(JSON_WEIGHT_KEY, m.get(JSON_WEIGHT_KEY));
 				arrObj.put(JSON_REPS, m.get(JSON_REPS));
 				arrObj.put(JSON_WEIGHT_UNITS, m.get(JSON_WEIGHT_UNITS));
@@ -490,9 +521,10 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			return;
 		}
 		m_entry.setSets(json.toString());
-		
+
 		ContentValues values = new ContentValues();
-		values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SETS, m_entry.getSets());
+		values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SETS,
+				m_entry.getSets());
 		Uri uri = Uri.parse(ENTRY_CONTENT_STRING + "/entry/" + m_entryId);
 		getContentResolver().update(uri, values, null, null);
 	}

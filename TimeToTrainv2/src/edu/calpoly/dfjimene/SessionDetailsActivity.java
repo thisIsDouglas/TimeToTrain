@@ -1,8 +1,11 @@
 package edu.calpoly.dfjimene;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -15,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
@@ -35,251 +39,266 @@ import edu.calpoly.dfjimene.exerciseentry.SimpleEntryView;
 import edu.calpoly.dfjimene.exerciseentry.SimpleEntryView.OnSimpleEntryChangeListener;
 
 public class SessionDetailsActivity extends SherlockFragmentActivity implements
-      LoaderCallbacks<Cursor>, OnSimpleEntryChangeListener {
+		LoaderCallbacks<Cursor>, OnSimpleEntryChangeListener {
 
-   /** Session ID this activity concerns */
-   private long m_sessionId;
+	/** Session ID this activity concerns */
+	private long m_sessionId;
 
-   /** Adapter for Simple Entries */
-   private SimpleEntryCursorAdapter m_simpleEntryAdapter;
+	/** Adapter for Simple Entries */
+	private SimpleEntryCursorAdapter m_simpleEntryAdapter;
 
-   /** View holding simple entries */
-   private ListView m_simpleEntryList;
+	/** View holding simple entries */
+	private ListView m_simpleEntryList;
 
-   /** The activity's context */
-   private Context m_context;
+	/** The activity's context */
+	private Context m_context;
 
-   /** Extras key for entry id */
-   public static final String ENTRY_ID = "entry_id";
+	/** Extras key for entry id */
+	public static final String ENTRY_ID = "entry_id";
 
-   /** Intent Session ID key string to pass in the intent */
-   public static final String SESSION_ID = "session_id";
+	/** Intent Session ID key string to pass in the intent */
+	public static final String SESSION_ID = "session_id";
 
-   /** Uri String for querying for the session's title */
-   private static final String SESSION_CONTENT_STRING = "content://edu.calpoly.dfjimene.data.contentprovider/sessions/session/";
+	/** Uri String for querying for the session's title */
+	private static final String SESSION_CONTENT_STRING = "content://edu.calpoly.dfjimene.data.contentprovider/sessions/session/";
 
-   /** Uri String for getting simple entry information */
-   private static final String SIMPLE_ENTRY_CONTENT_STRING = "content://edu.calpoly.dfjimene.data.contentprovider/simpleentry/";
+	/** Uri String for getting simple entry information */
+	private static final String SIMPLE_ENTRY_CONTENT_STRING = "content://edu.calpoly.dfjimene.data.contentprovider/simpleentry/";
 
-   /** Loader ID for Session details activity */
-   private static final int LOADER_ID = 2;
+	/** Loader ID for Session details activity */
+	private static final int LOADER_ID = 2;
 
-   /** Entry position for deleting */
-   private int m_entryPosition = -1;
+	/** Entry position for deleting */
+	private int m_entryPosition = -1;
 
-   /** Selected simple entry view */
-   private SimpleEntryView m_simpleEntryView;
+	/** Selected simple entry view */
+	private SimpleEntryView m_simpleEntryView;
 
-   /** CAB for deleting entries */
-   private ActionMode m_actionMode;
-   private Callback m_actionModeCallback;
+	/** CAB for deleting entries */
+	private ActionMode m_actionMode;
+	private Callback m_actionModeCallback;
 
-   /** Button for adding an entry */
-   private Button m_buttonAdd;
+	/** Button for adding an entry */
+	private Button m_buttonAdd;
 
-   /** Content uri string for entries */
-   private static final String ENTRY_CONTENT_STRING = TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
-         + "/entry/";
+	/** Content uri string for entries */
+	private static final String ENTRY_CONTENT_STRING = TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
+			+ "/entry/";
 
-   @Override
-   protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-      this.m_sessionId = getIntent().getLongExtra(
-            SessionListActivity.INTENT_SESSION_ID, -1);
-      if (m_sessionId < 0)
-         Log.e(this.getClass().getName(), "Negative session ID");
-      changeTitleForSession(m_sessionId);
-      this.m_simpleEntryAdapter = new SimpleEntryCursorAdapter(this, null, 0);
-      getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-      this.m_simpleEntryAdapter.setOnSimpleEntryChangeListener(this);
-      setContentView(R.layout.session_entry_list);
-      this.m_context = this;
-      this.m_simpleEntryList = (ListView) findViewById(R.id.entry_list);
-      this.m_simpleEntryList.setAdapter(m_simpleEntryAdapter);
-      this.m_buttonAdd = (Button) findViewById(R.id.view_add_entry);
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-      initListeners();
+		this.m_sessionId = getIntent().getLongExtra(
+				SessionListActivity.INTENT_SESSION_ID, -1);
+		if (m_sessionId < 0)
+			Log.e(this.getClass().getName(), "Negative session ID");
+		changeTitleForSession(m_sessionId);
+		this.m_simpleEntryAdapter = new SimpleEntryCursorAdapter(this, null, 0);
+		getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+		this.m_simpleEntryAdapter.setOnSimpleEntryChangeListener(this);
+		setContentView(R.layout.session_entry_list);
+		this.m_context = this;
+		this.m_simpleEntryList = (ListView) findViewById(R.id.entry_list);
+		this.m_simpleEntryList.setAdapter(m_simpleEntryAdapter);
+		this.m_buttonAdd = (Button) findViewById(R.id.view_add_entry);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		LinearLayout layout = (LinearLayout) m_simpleEntryList.getParent();
+		Resources res = getResources();
+		Drawable d = res.getDrawable(R.drawable.background_icon);
+		d.setAlpha(45);
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+			layout.setBackgroundDrawable(d);
+		} else {
+			layout.setBackground(d);
+		}
+		initListeners();
 
-   }
+	}
 
-   @Override
-   public boolean onCreateOptionsMenu(Menu menu) {
-      MenuInflater inflater = this.getSupportMenuInflater();
-      inflater.inflate(R.menu.details_menu, menu);
-      return true;
-   }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = this.getSupportMenuInflater();
+		inflater.inflate(R.menu.details_menu, menu);
+		return true;
+	}
 
-   @Override
-   public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-      case R.id.details_help:
-         Toast.makeText(
-               this,
-               "Please select an entry to view and modify."
-                     + "To delete an existing entry, tap and hold the entry"
-                     + " you no longer want and tap \"Delete Entry\"",
-               Toast.LENGTH_LONG).show();
-         return true;
-      case android.R.id.home:
-         NavUtils.navigateUpTo(this,
-               new Intent(this, SessionListActivity.class));
-         return true;
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.details_help:
+			Toast.makeText(
+					this,
+					"Please select an entry to view and modify."
+							+ "To delete an existing entry, tap and hold the entry"
+							+ " you no longer want and tap \"Delete Entry\"",
+					Toast.LENGTH_LONG).show();
+			return true;
+		case android.R.id.home:
+			NavUtils.navigateUpTo(this, new Intent(this,
+					SessionListActivity.class));
+			return true;
 
-      default:
-         return super.onOptionsItemSelected(item);
-      }
-   }
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-   private void initListeners() {
-      this.m_buttonAdd.setOnClickListener(new OnClickListener() {
+	private void initListeners() {
+		this.m_buttonAdd.setOnClickListener(new OnClickListener() {
 
-         @Override
-         public void onClick(View v) {
-            Intent i = new Intent(m_context, AddEntryActivity.class);
-            i.putExtra(SESSION_ID, m_sessionId);
-            startActivity(i);
-         }
-      });
-      this.m_simpleEntryList
-            .setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(m_context, AddEntryActivity.class);
+				i.putExtra(SESSION_ID, m_sessionId);
+				startActivity(i);
+			}
+		});
+		this.m_simpleEntryList
+				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-               @Override
-               public boolean onItemLongClick(AdapterView<?> parent, View view,
-                     int position, long id) {
-                  if (m_actionMode != null) {
-                     return false;
-                  }
-                  m_actionMode = getSherlock().startActionMode(
-                        m_actionModeCallback);
-                  m_entryPosition = position;
-                  return true;
-               }
-            });
-      this.m_actionModeCallback = new Callback() {
+					@Override
+					public boolean onItemLongClick(AdapterView<?> parent,
+							View view, int position, long id) {
+						if (m_actionMode != null) {
+							return false;
+						}
+						m_actionMode = getSherlock().startActionMode(
+								m_actionModeCallback);
+						m_entryPosition = position;
+						return true;
+					}
+				});
+		this.m_actionModeCallback = new Callback() {
 
-         @Override
-         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-         }
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				return false;
+			}
 
-         @Override
-         public void onDestroyActionMode(ActionMode mode) {
-            m_actionMode = null;
-         }
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				m_actionMode = null;
+			}
 
-         @Override
-         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.details_action_menu, menu);
-            return true;
-         }
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				MenuInflater inflater = mode.getMenuInflater();
+				inflater.inflate(R.menu.details_action_menu, menu);
+				return true;
+			}
 
-         @Override
-         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            m_simpleEntryView = ((SimpleEntryView) m_simpleEntryList
-                  .getChildAt(m_entryPosition));
-            if (m_simpleEntryView == null) {
-               Log.e(SessionDetailsActivity.class.getName(),
-                     "m_simpleEntryView should always be set in this situation");
-               return false;
-            }
-            switch (item.getItemId()) {
-            case R.id.delete_entry:
-               Log.i(SessionDetailsActivity.class.getName(),
-                     "Deleting entry with ID "
-                           + m_simpleEntryView.getSimpleEntry().getEntryID()
-                           + "From Entries...");
-               Uri uri = Uri.parse(ENTRY_CONTENT_STRING
-                     + m_simpleEntryView.getSimpleEntry().getEntryID());
-               getContentResolver().delete(uri, null, null);
-               fillData();
-               m_simpleEntryView = null;
-               m_entryPosition = -1;
-               mode.finish();
-               return true;
-            default:
-               return false;
-            }
-         }
-      };
-      this.m_simpleEntryList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				m_simpleEntryView = ((SimpleEntryView) m_simpleEntryList
+						.getChildAt(m_entryPosition));
+				if (m_simpleEntryView == null) {
+					Log.e(SessionDetailsActivity.class.getName(),
+							"m_simpleEntryView should always be set in this situation");
+					return false;
+				}
+				switch (item.getItemId()) {
+				case R.id.delete_entry:
+					Log.i(SessionDetailsActivity.class.getName(),
+							"Deleting entry with ID "
+									+ m_simpleEntryView.getSimpleEntry()
+											.getEntryID() + "From Entries...");
+					Uri uri = Uri.parse(ENTRY_CONTENT_STRING
+							+ m_simpleEntryView.getSimpleEntry().getEntryID());
+					getContentResolver().delete(uri, null, null);
+					fillData();
+					m_simpleEntryView = null;
+					m_entryPosition = -1;
+					mode.finish();
+					return true;
+				default:
+					return false;
+				}
+			}
+		};
+		this.m_simpleEntryList
+				.setOnItemClickListener(new OnItemClickListener() {
 
-         @Override
-         public void onItemClick(AdapterView<?> parent, View view,
-               int position, long id) {
-            SimpleEntryView sView = (SimpleEntryView) view;
-            Intent intent;
-            if (sView.getSimpleEntry().getType() == ExerciseEntry.TYPE_CARDIO) {
-               intent = new Intent(m_context,
-                     ViewCardioEntryActivity.class);
-            } else {
-               intent = new Intent(m_context,
-                     ViewStrengthEntryActivity.class);
-            }
-            intent.putExtra("entry", sView.getSimpleEntry().getEntryID());
-            intent.putExtra("session", sView.getSimpleEntry().getSessionID());
-            startActivity(intent);
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						SimpleEntryView sView = (SimpleEntryView) view;
+						Intent intent;
+						if (sView.getSimpleEntry().getType() == ExerciseEntry.TYPE_CARDIO) {
+							intent = new Intent(m_context,
+									ViewCardioEntryActivity.class);
+						} else {
+							intent = new Intent(m_context,
+									ViewStrengthEntryActivity.class);
+						}
+						intent.putExtra("entry", sView.getSimpleEntry()
+								.getEntryID());
+						intent.putExtra("session", sView.getSimpleEntry()
+								.getSessionID());
+						startActivity(intent);
 
-         }
-      });
-   }
+					}
+				});
+	}
 
-   private void changeTitleForSession(long sessionId) {
-      String[] projection = { TimeToTrainTables.SESSIONS_KEY_ID,
-            TimeToTrainTables.SESSIONS_KEY_NAME,
-            TimeToTrainTables.SESSIONS_KEY_DATE };
-      Cursor cursor = getContentResolver().query(
-            Uri.parse(SESSION_CONTENT_STRING + sessionId), projection, null,
-            null, null);
-      if (cursor.getCount() != 1) {
-         Log.e(this.getClass().getName(), "Bad query.");
-      }
-      Log.d(this.getClass().getName(), "" + sessionId);
-      cursor.moveToFirst();
-      String newTitle = cursor.getString(TimeToTrainTables.SESSIONS_COL_NAME);
-      if (newTitle != null && !newTitle.equals(""))
-         setTitle(newTitle);
-      else
-         setTitle(cursor.getString(TimeToTrainTables.SESSIONS_COL_DATE));
-      cursor.close();
-   }
+	private void changeTitleForSession(long sessionId) {
+		String[] projection = { TimeToTrainTables.SESSIONS_KEY_ID,
+				TimeToTrainTables.SESSIONS_KEY_NAME,
+				TimeToTrainTables.SESSIONS_KEY_DATE };
+		Cursor cursor = getContentResolver().query(
+				Uri.parse(SESSION_CONTENT_STRING + sessionId), projection,
+				null, null, null);
+		if (cursor.getCount() != 1) {
+			Log.e(this.getClass().getName(), "Bad query.");
+		}
+		Log.d(this.getClass().getName(), "" + sessionId);
+		cursor.moveToFirst();
+		String newTitle = cursor.getString(TimeToTrainTables.SESSIONS_COL_NAME);
+		if (newTitle != null && !newTitle.equals(""))
+			setTitle(newTitle);
+		else
+			setTitle(cursor.getString(TimeToTrainTables.SESSIONS_COL_DATE));
+		cursor.close();
+	}
 
-   public void fillData() {
-      getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
-      m_simpleEntryList.setAdapter(m_simpleEntryAdapter);
-   }
+	public void fillData() {
+		getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+		m_simpleEntryList.setAdapter(m_simpleEntryAdapter);
+	}
 
-   @Override
-   public void onSimpleEntryChanged(SimpleEntryView view, SimpleEntry entry) {
-      // For now we do not need a listener for the simple entry. I put
-      // this here for in the event that I do, I can add to it.
+	@Override
+	public void onSimpleEntryChanged(SimpleEntryView view, SimpleEntry entry) {
+		// For now we do not need a listener for the simple entry. I put
+		// this here for in the event that I do, I can add to it.
 
-   }
+	}
 
-   @Override
-   public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-      String projection[] = { TimeToTrainTables.EXERCISE_ENTRIES_KEY_ID,
-            TimeToTrainTables.EXERCISE_ENTRIES_KEY_SESSION_ID,
-            TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME,
-            TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE };
-      Uri uri = Uri.parse(SIMPLE_ENTRY_CONTENT_STRING + m_sessionId);
-      CursorLoader loader = new CursorLoader(this, uri, projection, null, null,
-            null);
-      return loader;
-   }
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		String projection[] = { TimeToTrainTables.EXERCISE_ENTRIES_KEY_ID,
+				TimeToTrainTables.EXERCISE_ENTRIES_KEY_SESSION_ID,
+				TimeToTrainTables.EXERCISE_ENTRIES_KEY_EXERCISE_NAME,
+				TimeToTrainTables.EXERCISE_ENTRIES_KEY_TYPE };
+		Uri uri = Uri.parse(SIMPLE_ENTRY_CONTENT_STRING + m_sessionId);
+		CursorLoader loader = new CursorLoader(this, uri, projection, null,
+				null, null);
+		return loader;
+	}
 
-   @Override
-   public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
-      this.m_simpleEntryAdapter.swapCursor(arg1);
-      this.m_simpleEntryAdapter.setOnSimpleEntryChangeListener(this);
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+		this.m_simpleEntryAdapter.swapCursor(arg1);
+		this.m_simpleEntryAdapter.setOnSimpleEntryChangeListener(this);
 
-   }
+	}
 
-   @Override
-   public void onLoaderReset(Loader<Cursor> arg0) {
-      this.m_simpleEntryAdapter.swapCursor(null);
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		this.m_simpleEntryAdapter.swapCursor(null);
 
-   }
+	}
 
 }

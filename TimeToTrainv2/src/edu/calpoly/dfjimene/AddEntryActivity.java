@@ -11,11 +11,16 @@ import edu.calpoly.dfjimene.data.TimeToTrainContentProvider;
 import edu.calpoly.dfjimene.data.TimeToTrainTables;
 import edu.calpoly.dfjimene.exerciseentry.ExerciseEntry;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
@@ -90,6 +95,8 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 		}
 	}
 
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
 	private void initLayout() {
 		setContentView(R.layout.add_entry_view);
 		setTitle("Add New Entry");
@@ -101,11 +108,22 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 				.findViewById(R.id.edit_minutes);
 		m_timeSeconds = (EditText) m_cardioLayout
 				.findViewById(R.id.edit_seconds);
+		m_timeSeconds.setFilters(new InputFilter[]{new InputFilterMinMax("0", "59")});
 		m_radioGroup = (RadioGroup) findViewById(R.id.group_exercise_type);
 		m_radioGroup.check(R.id.radio_strength);
 		m_exerciseName = (EditText) findViewById(R.id.edit_entry_name);
 		m_strTip = (TextView) findViewById(R.id.strength_tip);
 		m_radioGroup.setOnCheckedChangeListener(this);
+		LinearLayout layout = (LinearLayout)m_exerciseName.getParent();
+		Resources res = getResources();
+		Drawable d = res.getDrawable(R.drawable.background_icon);
+		d.setAlpha(45);
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+			layout.setBackgroundDrawable(d);
+		} else {
+			layout.setBackground(d);
+		}
 
 	}
 
@@ -274,4 +292,33 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 		}
 	}
 
+	private class InputFilterMinMax implements InputFilter {
+
+	    private int min, max;
+
+	    public InputFilterMinMax(int min, int max) {
+	        this.min = min;
+	        this.max = max;
+	    }
+
+	    public InputFilterMinMax(String min, String max) {
+	        this.min = Integer.parseInt(min);
+	        this.max = Integer.parseInt(max);
+	    }
+
+	    @Override
+	    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {   
+	        try {
+	            int input = Integer.parseInt(dest.toString() + source.toString());
+	            if (isInRange(min, max, input))
+	                return null;
+	        } catch (NumberFormatException nfe) { }     
+	        return "";
+	    }
+
+	    private boolean isInRange(int a, int b, int c) {
+	        return b > a ? c >= a && c <= b : c >= b && c <= a;
+	    }
+	}
+	
 }

@@ -1,5 +1,7 @@
 package edu.calpoly.dfjimene;
 
+import java.util.Random;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -7,10 +9,13 @@ import edu.calpoly.dfjimene.data.TimeToTrainContentProvider;
 import edu.calpoly.dfjimene.data.TimeToTrainTables;
 import edu.calpoly.dfjimene.exerciseentry.ExerciseEntry;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -72,6 +77,9 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 		@Override
 		public void onClick(View v) {
 			submitEditedNote();
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(m_editor.getWindowToken(),
+					0);
 		}
 	};
 	
@@ -149,7 +157,19 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 		cursor.close();
 	}
 
+	@SuppressLint("NewApi")
+	@SuppressWarnings("deprecation")
 	public void initCardioView() {
+		Resources res = getResources();
+		Random rand = new Random();
+		Drawable img;
+		if (rand.nextInt() % 2 == 0) {
+			img = res.getDrawable(R.drawable.cardio_1);
+		}
+		else{
+			img = res.getDrawable(R.drawable.cardio_2);
+		}
+		img.setAlpha(45);
 		setTitle(m_entry.getExreciseName());
 		setContentView(R.layout.view_entry_cardio);
 		TextView time = (TextView) findViewById(R.id.cardio_time_view);
@@ -184,6 +204,12 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 			m_addNoteButton.setOnClickListener(m_addNoteListener);
 		}
 		m_mainLayout = (LinearLayout) m_noteLayout.getParent();
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+			m_mainLayout.setBackgroundDrawable(img);
+		} else {
+			m_mainLayout.setBackground(img);
+		}
 	}
 
 	public void buildNoteEditor() {

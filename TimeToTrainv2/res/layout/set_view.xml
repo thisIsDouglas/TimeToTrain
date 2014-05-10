@@ -1,50 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp" >
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/set_num_title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight=".18"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="Medium Text"
+        android:text="Set 1"
         android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/weight_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".14"
+        android:gravity="right"
+        android:paddingRight="5dp"
+        android:text="20"
+        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/weight_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".3"
-            android:gravity="right"
-            android:paddingRight="5dp"
-            android:text="20"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/units_for_set"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".18"
+        android:text="lb" />
 
-        <TextView
-            android:id="@+id/units_for_set"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".2"
-            android:text="lb" />
-
-        <TextView
-            android:id="@+id/reps_for_set"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:gravity="center"
-            android:text="TextView"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/reps_for_set"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".5"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="16sp" />
 
 </LinearLayout>
