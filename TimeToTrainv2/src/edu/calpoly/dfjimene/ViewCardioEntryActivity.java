@@ -46,21 +46,21 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 	private static final String ENTRY_CONTENT_STRING = TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES;
 
 	/** TextView holder for when there is no note to display */
-	TextView m_noteView;
+	private TextView m_noteView;
 
 	/** Layout for entire thing */
-	LinearLayout m_mainLayout;
+	private LinearLayout m_mainLayout;
 	
 	/** Note layout container */
-	LinearLayout m_noteLayout = null;
-	LinearLayout m_editNoteLayout = null;
+	private LinearLayout m_noteLayout = null;
+	private LinearLayout m_editNoteLayout = null;
 
 	/** Edit Text for editing notes */
-	EditText m_editor = null;
+	private EditText m_editor = null;
 
 	/** Add Note Buttons */
-	Button m_addNoteButton;
-	Button m_submitButton;
+	private Button m_addNoteButton;
+	private Button m_submitButton;
 
 	/** On click listeners for submitting a note */
 	private OnClickListener m_addNoteListener = new OnClickListener() {
