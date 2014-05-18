@@ -17,7 +17,7 @@
             android:name="edu.calpoly.dfjimene.SessionListActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
-            android:launchMode="singleTask" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,8 @@
             android:name="edu.calpoly.dfjimene.SessionDetailsActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_session_details"
-            android:parentActivityName="edu.calpoly.dfjimene.SessionListActivity" >
+            android:parentActivityName="edu.calpoly.dfjimene.SessionListActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.calpoly.dfjimene.SessionListActivity" />
@@ -43,7 +44,8 @@
         <activity
             android:name="edu.calpoly.dfjimene.AddEntryActivity"
             android:label="@string/title_activity_select_and_edit_entry"
-            android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity" >
+            android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.calpoly.dfjimene.SessionDetailsActivity" />
@@ -52,6 +54,7 @@
             android:name="edu.calpoly.dfjimene.ViewStrengthEntryActivity"
             android:label="@string/title_activity_view_entry"
             android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -61,6 +64,7 @@
             android:name="edu.calpoly.dfjimene.ViewCardioEntryActivity"
             android:label="@string/title_activity_view_cardio_entry"
             android:parentActivityName="edu.calpoly.dfjimene.SessionDetailsActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

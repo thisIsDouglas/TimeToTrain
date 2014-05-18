@@ -87,7 +87,10 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0){
+			finish();
+			return;
+		}
 		this.m_sessionAdapter = new SessionCursorAdapter(this, null, 0);
 		getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 		this.m_sessionAdapter.setOnSessionChangeListener(this);
