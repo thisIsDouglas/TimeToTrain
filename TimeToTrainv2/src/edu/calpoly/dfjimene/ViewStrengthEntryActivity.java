@@ -26,7 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
+// import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -186,8 +186,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		Cursor cursor = getContentResolver().query(uri, PROJECTION, null, null,
 				null);
 		if (cursor.getCount() != 1) {
-			Log.e(ViewStrengthEntryActivity.class.getName(),
-					"Rows returned should be 1! The ids are unique!");
+			// Log.e(ViewStrengthEntryActivity.class.getName(),
+			// 		"Rows returned should be 1! The ids are unique!");
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
 			NavUtils.navigateUpTo(this, i);
@@ -270,7 +270,7 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 				}
 			}
 		} catch (JSONException e) {
-			Log.e(ViewStrengthEntryActivity.class.getName(), "Bad JSON format.");
+			// Log.e(ViewStrengthEntryActivity.class.getName(), "Bad JSON format.");
 			e.printStackTrace();
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
@@ -304,9 +304,9 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 	public void buildNoteEditor() {
 		if (m_noteLayout == null) {
-			Log.e(ViewCardioEntryActivity.class.getName(),
-					"This layout should never be null if the "
-							+ "button to add notes is present");
+			// Log.e(ViewCardioEntryActivity.class.getName(),
+			// 		"This layout should never be null if the "
+			// 				+ "button to add notes is present");
 		}
 
 		if (m_editNoteLayout == null) {
@@ -365,9 +365,9 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 	public void editNote() {
 		if (m_noteLayout == null) {
-			Log.e(ViewCardioEntryActivity.class.getName(),
-					"This layout should never be null if the "
-							+ "button to edit notes is present");
+			// Log.e(ViewCardioEntryActivity.class.getName(),
+			// 		"This layout should never be null if the "
+			// 				+ "button to edit notes is present");
 		}
 		if (m_editNoteLayout == null) {
 			LayoutInflater inflater = getLayoutInflater();
@@ -408,9 +408,9 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 	public void buildSetEditor() {
 		if (m_setLayout == null) {
-			Log.e(ViewCardioEntryActivity.class.getName(),
-					"This layout should never be null if the "
-							+ "button to add notes is present");
+			// Log.e(ViewCardioEntryActivity.class.getName(),
+			// 		"This layout should never be null if the "
+			// 				+ "button to add notes is present");
 		}
 
 		if (m_editSetLayout == null) {
@@ -512,7 +512,7 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			json.put(JSON_ARR_KEY, jsonArr);
 
 		} catch (JSONException e) {
-			Log.e(ViewStrengthEntryActivity.class.getName(), "Bad JSON format.");
+			// Log.e(ViewStrengthEntryActivity.class.getName(), "Bad JSON format.");
 			e.printStackTrace();
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);

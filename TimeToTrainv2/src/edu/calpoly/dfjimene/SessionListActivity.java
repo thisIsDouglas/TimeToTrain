@@ -27,7 +27,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
+// import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -162,16 +162,16 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 				m_sessionView = ((SessionView) m_sessionListView
 						.getChildAt(m_sessionPosition));
 				if (m_sessionView == null) {
-					Log.e(SessionListActivity.class.getName(),
-							"m_sessionView should always be set in this situation");
+					// Log.e(SessionListActivity.class.getName(),
+					// 		"m_sessionView should always be set in this situation");
 					return false;
 				}
 				switch (item.getItemId()) {
 				case R.id.delete_session:
-					Log.i(SessionListActivity.class.getName(),
-							"Removing session with ID "
-									+ m_sessionView.getSession().getID()
-									+ " from the DB...");
+					// Log.i(SessionListActivity.class.getName(),
+					// 		"Removing session with ID "
+					// 				+ m_sessionView.getSession().getID()
+					// 				+ " from the DB...");
 					removeSession(m_sessionView.getSession());
 					m_sessionView = null;
 					mode.finish();
@@ -197,13 +197,13 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 											if (m_strSessionName != null
 													&& !m_strSessionName
 															.equals("")) {
-												Log.i(SessionListActivity.class
-														.getName(),
-														"Editing session with ID "
-																+ m_sessionView
-																		.getSession()
-																		.getID()
-																+ " in DB");
+												// Log.i(SessionListActivity.class
+												// 		.getName(),
+												// 		"Editing session with ID "
+												// 				+ m_sessionView
+												// 						.getSession()
+												// 						.getID()
+												// 				+ " in DB");
 												m_sessionView
 														.getSession()
 														.setName(
@@ -240,13 +240,13 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											Log.i(SessionListActivity.class
-													.getName(),
-													"Editing session with ID "
-															+ m_sessionView
-																	.getSession()
-																	.getID()
-															+ " in DB");
+											// Log.i(SessionListActivity.class
+											// 		.getName(),
+											// 		"Editing session with ID "
+											// 				+ m_sessionView
+											// 						.getSession()
+											// 						.getID()
+											// 				+ " in DB");
 											m_sessionView.getSession().setName(
 													"");
 											m_sessionView
@@ -301,10 +301,10 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 												.getText().toString();
 										if (m_strSessionName != null
 												&& !m_strSessionName.equals("")) {
-											Log.i(SessionListActivity.class
-													.getName(), "Adding "
-													+ m_strSessionName
-													+ " session to DB");
+											// Log.i(SessionListActivity.class
+											// 		.getName(), "Adding "
+											// 		+ m_strSessionName
+											// 		+ " session to DB");
 											long id = addSession(new Session(
 													m_strSessionName));
 											m_vwSessionName.setText("");
@@ -340,9 +340,9 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										Log.i(SessionListActivity.class
-												.getName(),
-												"Adding nameless session to DB");
+										// Log.i(SessionListActivity.class
+										// 		.getName(),
+										// 		"Adding nameless session to DB");
 										m_vwSessionName.setText("");
 										long id = addSession(new Session());
 										dialog.dismiss();

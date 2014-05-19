@@ -12,7 +12,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
+// import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -94,7 +94,7 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
 		this.m_sessionId = getIntent().getLongExtra(
 				SessionListActivity.INTENT_SESSION_ID, -1);
 		if (m_sessionId < 0)
-			Log.e(this.getClass().getName(), "Negative session ID");
+			// Log.e(this.getClass().getName(), "Negative session ID");
 		changeTitleForSession(m_sessionId);
 		this.m_simpleEntryAdapter = new SimpleEntryCursorAdapter(this, null, 0);
 		getSupportLoaderManager().initLoader(LOADER_ID, null, this);
@@ -196,16 +196,16 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
 				m_simpleEntryView = ((SimpleEntryView) m_simpleEntryList
 						.getChildAt(m_entryPosition));
 				if (m_simpleEntryView == null) {
-					Log.e(SessionDetailsActivity.class.getName(),
-							"m_simpleEntryView should always be set in this situation");
+					// Log.e(SessionDetailsActivity.class.getName(),
+					// 		"m_simpleEntryView should always be set in this situation");
 					return false;
 				}
 				switch (item.getItemId()) {
 				case R.id.delete_entry:
-					Log.i(SessionDetailsActivity.class.getName(),
-							"Deleting entry with ID "
-									+ m_simpleEntryView.getSimpleEntry()
-											.getEntryID() + " from Entries...");
+					// Log.i(SessionDetailsActivity.class.getName(),
+					// 		"Deleting entry with ID "
+					// 				+ m_simpleEntryView.getSimpleEntry()
+					// 						.getEntryID() + " from Entries...");
 					Uri uri = Uri.parse(ENTRY_CONTENT_STRING
 							+ m_simpleEntryView.getSimpleEntry().getEntryID());
 					getContentResolver().delete(uri, null, null);
@@ -252,9 +252,9 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
 				Uri.parse(SESSION_CONTENT_STRING + sessionId), projection,
 				null, null, null);
 		if (cursor.getCount() != 1) {
-			Log.e(this.getClass().getName(), "Bad query.");
+			// Log.e(this.getClass().getName(), "Bad query.");
 		}
-		Log.d(this.getClass().getName(), "" + sessionId);
+		// Log.d(this.getClass().getName(), "" + sessionId);
 		cursor.moveToFirst();
 		String newTitle = cursor.getString(TimeToTrainTables.SESSIONS_COL_NAME);
 		if (newTitle != null && !newTitle.equals(""))

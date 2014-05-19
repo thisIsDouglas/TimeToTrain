@@ -29,7 +29,7 @@
         android:paddingRight="20dp"
         android:paddingTop="5dp"
         android:text="Large Text"
-        android:textSize="36sp" />
+        android:textSize="48sp" />
 
     <TextView
         android:id="@+id/your_distance"
@@ -48,7 +48,7 @@
         android:paddingRight="20dp"
         android:paddingTop="5dp"
         android:text="Large Text"
-        android:textSize="36sp" />
+        android:textSize="48sp" />
 
     <TextView
         android:id="@+id/cardio_notes"

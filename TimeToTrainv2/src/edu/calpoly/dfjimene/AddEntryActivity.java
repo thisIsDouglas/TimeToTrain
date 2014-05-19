@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
+// import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -192,12 +192,12 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 						.parse(TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
 								+ "/entry/0");
 				uri = getContentResolver().insert(uri, values);
-				if (uri == null)
-					Log.e(AddEntryActivity.class.getName(), "Null? Why?");
+				// if (uri == null)
+					// Log.e(AddEntryActivity.class.getName(), "Null? Why?");
 				String str = uri.getLastPathSegment();
 				if (str == null) {
-					Log.e(AddEntryActivity.class.getName(),
-							"Null string makes no sense");
+					// Log.e(AddEntryActivity.class.getName(),
+					// 		"Null string makes no sense");
 					Intent i = new Intent(this, SessionDetailsActivity.class);
 					i.putExtra(SessionListActivity.INTENT_SESSION_ID,
 							m_sessionId);
@@ -209,8 +209,8 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 				try {
 					entryId = Long.parseLong(str);
 				} catch (NumberFormatException e) {
-					Log.e(AddEntryActivity.class.getName(),
-							"Formatted incorrectly somehow...");
+					// Log.e(AddEntryActivity.class.getName(),
+					// 		"Formatted incorrectly somehow...");
 					Intent i = new Intent(this, SessionDetailsActivity.class);
 					i.putExtra(SessionListActivity.INTENT_SESSION_ID,
 							m_sessionId);
@@ -242,12 +242,12 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 					.parse(TimeToTrainContentProvider.CONTENT_STRING_EXERCISE_ENTRIES
 							+ "/entry/0");
 			uri = getContentResolver().insert(uri, values);
-			if (uri == null)
-				Log.e(AddEntryActivity.class.getName(), "Null? Why?");
+			// if (uri == null)
+				// Log.e(AddEntryActivity.class.getName(), "Null? Why?");
 			String str = uri.getLastPathSegment();
 			if (str == null) {
-				Log.e(AddEntryActivity.class.getName(),
-						"Null string makes no sense");
+				// Log.e(AddEntryActivity.class.getName(),
+				// 		"Null string makes no sense");
 				Intent i = new Intent(this, SessionDetailsActivity.class);
 				i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
 				NavUtils.navigateUpTo(this, i);
@@ -258,8 +258,8 @@ public class AddEntryActivity extends SherlockFragmentActivity implements
 			try {
 				entryId = Long.parseLong(str);
 			} catch (NumberFormatException e) {
-				Log.e(AddEntryActivity.class.getName(),
-						"Formatted incorrectly somehow...");
+				// Log.e(AddEntryActivity.class.getName(),
+				// 		"Formatted incorrectly somehow...");
 				Intent i = new Intent(this, SessionDetailsActivity.class);
 				i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
 				NavUtils.navigateUpTo(this, i);
