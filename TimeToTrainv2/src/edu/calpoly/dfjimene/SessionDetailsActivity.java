@@ -205,7 +205,7 @@ public class SessionDetailsActivity extends SherlockFragmentActivity implements
 					Log.i(SessionDetailsActivity.class.getName(),
 							"Deleting entry with ID "
 									+ m_simpleEntryView.getSimpleEntry()
-											.getEntryID() + "From Entries...");
+											.getEntryID() + " from Entries...");
 					Uri uri = Uri.parse(ENTRY_CONTENT_STRING
 							+ m_simpleEntryView.getSimpleEntry().getEntryID());
 					getContentResolver().delete(uri, null, null);
