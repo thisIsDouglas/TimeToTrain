@@ -40,6 +40,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * Activity that displays the session list for users to manage
+ * 
+ * @author Douglas Jimenez
+ * 
+ */
 public class SessionListActivity extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor>, OnSessionChangeListener {
 
@@ -86,25 +92,40 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// Always call super's onCreate
 		super.onCreate(savedInstanceState);
-		if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0){
+
+		// Cancel this activity if it should not be started
+		if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
 			finish();
 			return;
 		}
+
+		// Initialize the adapter and the cursor loader and the session
+		// adapter's session changed listener
 		this.m_sessionAdapter = new SessionCursorAdapter(this, null, 0);
 		getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 		this.m_sessionAdapter.setOnSessionChangeListener(this);
 
+		// Initialize the layout
 		initLayout();
 	}
 
+	/**
+	 * Initializes the layout for the Session List Activity. Warnings and lint
+	 * are checked within the code, so they are suppressed.
+	 */
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	protected void initLayout() {
+
+		// Initialize the view and bind UI components to member variables
 		setContentView(R.layout.session_list);
 		this.m_sessionListView = (ListView) findViewById(R.id.sessions_list);
 		this.m_sessionListView.setAdapter(m_sessionAdapter);
 		this.m_addSession = (Button) findViewById(R.id.view_add_session);
+
+		// Initialize listeners and callback
 		initAddSessionListener();
 		this.m_sessionListView
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -128,6 +149,9 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
+
+						// Create an intent adding the session id to the extras
+						// and start the session details activity
 						Intent intent = new Intent(context,
 								SessionDetailsActivity.class);
 						SessionView sView = (SessionView) view;
@@ -152,6 +176,8 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 
 			@Override
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+				// Inflate CAB menu into the action bar
 				MenuInflater inflater = mode.getMenuInflater();
 				inflater.inflate(R.menu.session_action_menu, menu);
 				return true;
@@ -159,24 +185,25 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 
 			@Override
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+				// Grab the session and decide which button was clicked
 				m_sessionView = ((SessionView) m_sessionListView
 						.getChildAt(m_sessionPosition));
 				if (m_sessionView == null) {
-					// Log.e(SessionListActivity.class.getName(),
-					// 		"m_sessionView should always be set in this situation");
 					return false;
 				}
 				switch (item.getItemId()) {
 				case R.id.delete_session:
-					// Log.i(SessionListActivity.class.getName(),
-					// 		"Removing session with ID "
-					// 				+ m_sessionView.getSession().getID()
-					// 				+ " from the DB...");
+
+					// Delete session was selected. Remove the session and end
+					// the CAB
 					removeSession(m_sessionView.getSession());
 					m_sessionView = null;
 					mode.finish();
 					return true;
 				case R.id.edit_session:
+
+					// Build an alert dialog asking for the new session name
 					AlertDialog.Builder builder = new AlertDialog.Builder(
 							context);
 					LayoutInflater inflater = getLayoutInflater();
@@ -184,6 +211,10 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 							R.layout.session_edit_prompt, null);
 					m_vwSessionName = (EditText) dialogView
 							.findViewById(R.id.edit_session_name);
+
+					// Set the positive, negative and neutral button actions.
+					// The positive and neutral buttons will update the
+					// session's name
 					builder.setView(dialogView)
 							.setPositiveButton(R.string.button_ok,
 									new DialogInterface.OnClickListener() {
@@ -197,13 +228,6 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 											if (m_strSessionName != null
 													&& !m_strSessionName
 															.equals("")) {
-												// Log.i(SessionListActivity.class
-												// 		.getName(),
-												// 		"Editing session with ID "
-												// 				+ m_sessionView
-												// 						.getSession()
-												// 						.getID()
-												// 				+ " in DB");
 												m_sessionView
 														.getSession()
 														.setName(
@@ -240,13 +264,6 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											// Log.i(SessionListActivity.class
-											// 		.getName(),
-											// 		"Editing session with ID "
-											// 				+ m_sessionView
-											// 						.getSession()
-											// 						.getID()
-											// 				+ " in DB");
 											m_sessionView.getSession().setName(
 													"");
 											m_sessionView
@@ -262,6 +279,8 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 				}
 			}
 		};
+
+		// Set the background appropriately
 		LinearLayout layout = (LinearLayout) m_sessionListView.getParent();
 		Resources res = getResources();
 		Drawable d = res.getDrawable(R.drawable.background_icon);
@@ -284,12 +303,20 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 
 			@Override
 			public void onClick(View v) {
+
+				// Create a new alert dialog asking for the session's name. The
+				// layout used is inflated into it
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				LayoutInflater inflater = getLayoutInflater();
 				View dialogView = inflater.inflate(R.layout.session_add_prompt,
 						null);
 				m_vwSessionName = (EditText) dialogView
 						.findViewById(R.id.session_name);
+
+				// Set the positive, negative and neutral button click actions.
+				// The positive and neutral buttons will add a new session to
+				// the DB and then take the user to the new session's details
+				// activity
 				builder.setView(dialogView)
 						.setPositiveButton(R.string.button_ok,
 								new DialogInterface.OnClickListener() {
@@ -301,10 +328,6 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 												.getText().toString();
 										if (m_strSessionName != null
 												&& !m_strSessionName.equals("")) {
-											// Log.i(SessionListActivity.class
-											// 		.getName(), "Adding "
-											// 		+ m_strSessionName
-											// 		+ " session to DB");
 											long id = addSession(new Session(
 													m_strSessionName));
 											m_vwSessionName.setText("");
@@ -340,9 +363,6 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										// Log.i(SessionListActivity.class
-										// 		.getName(),
-										// 		"Adding nameless session to DB");
 										m_vwSessionName.setText("");
 										long id = addSession(new Session());
 										dialog.dismiss();
@@ -359,6 +379,8 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
+		// Initialize the action bar with the menu
 		MenuInflater inflater = this.getSupportMenuInflater();
 		inflater.inflate(R.menu.session_menu, menu);
 		return true;
@@ -368,6 +390,7 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menuhelp:
+			// If help is selected, make toast providing a hint
 			Toast.makeText(
 					this,
 					"Please select an existing workout session to review and add entries."
@@ -375,6 +398,14 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 							+ "\"Tap to Add a New Workout Session\". You can also edit or "
 							+ "delete a session by tapping and holding the desired session",
 					Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.menusurvey:
+			// If the survey button is clicked, send the user to the browser
+			// loading the google doc survey
+			Intent browserIntent = new Intent(
+					Intent.ACTION_VIEW,
+					Uri.parse("https://docs.google.com/forms/d/1PC11epczRfKb4XZgrmHp0NlY8CrUCMXYR350pH5NpqM/viewform?usp=send_form"));
+			startActivity(browserIntent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -388,24 +419,39 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 	 *            the session to be added
 	 */
 	private long addSession(Session session) {
+
+		// Initialize a URI and ContentValues for column values to add the
+		// session
 		Uri uri = Uri.parse(CHANGE_SESSION_CONTENT_STRING + "0");
 		ContentValues values = new ContentValues();
 		values.put(TimeToTrainTables.SESSIONS_KEY_NAME,
 				session.getSessionName());
 		values.put(TimeToTrainTables.SESSIONS_KEY_DATE,
 				Session.SESSION_DATE_FORMAT.format(session.getSessionDate()));
-		session.setId((Long.valueOf(getContentResolver().insert(uri, values)
+
+		// Set the session ID to the ID returned from inserting the new session
+		session.setId((Long.parseLong(getContentResolver().insert(uri, values)
 				.getLastPathSegment())));
+
+		// Refresh the data and return the new ID
 		fillData();
 		return session.getID();
 	}
 
+	/**
+	 * Deletes a session from the DB and refreshes the list of sessions
+	 * 
+	 * @param session
+	 */
 	protected void removeSession(Session session) {
 		Uri uri = Uri.parse(CHANGE_SESSION_CONTENT_STRING + session.getID());
 		getContentResolver().delete(uri, null, null);
 		fillData();
 	}
 
+	/**
+	 * Refreshes the session list's data
+	 */
 	public void fillData() {
 		getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
 		m_sessionListView.setAdapter(m_sessionAdapter);
@@ -413,6 +459,9 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void onSessionChanged(SessionView view, Session session) {
+
+		// When a session changes, update the session information and sync it
+		// with the DB
 		Uri uri = Uri.parse(CHANGE_SESSION_CONTENT_STRING + session.getID());
 		ContentValues values = new ContentValues();
 		values.put(TimeToTrainTables.SESSIONS_KEY_DATE,
@@ -420,12 +469,16 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 		values.put(TimeToTrainTables.SESSIONS_KEY_NAME,
 				session.getSessionName());
 		getContentResolver().update(uri, values, null, null);
+
+		// Remove the listener briefly and refresh the data
 		this.m_sessionAdapter.setOnSessionChangeListener(null);
 		fillData();
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+
+		// Initialize the projection and the loader using the projection and URI
 		String[] projection = { TimeToTrainTables.SESSIONS_KEY_ID,
 				TimeToTrainTables.SESSIONS_KEY_NAME,
 				TimeToTrainTables.SESSIONS_KEY_DATE };
@@ -437,6 +490,8 @@ public class SessionListActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+		
+		// Swap the cursor and set the change listener
 		this.m_sessionAdapter.swapCursor(arg1);
 		this.m_sessionAdapter.setOnSessionChangeListener(this);
 

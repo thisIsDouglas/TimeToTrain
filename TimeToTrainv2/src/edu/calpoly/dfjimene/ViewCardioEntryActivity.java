@@ -31,6 +31,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * Acitivty for viewing cardio entries and adding notes. In retrospect I
+ * should've made a super class for view entry activities to extend.
+ * 
+ * @author Douglas Jimenez
+ * 
+ */
 public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 
 	/** Session ID for this entry */
@@ -50,7 +57,7 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 
 	/** Layout for entire thing */
 	private LinearLayout m_mainLayout;
-	
+
 	/** Note layout container */
 	private LinearLayout m_noteLayout = null;
 	private LinearLayout m_editNoteLayout = null;
@@ -71,18 +78,15 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 
 		}
 	};
-
 	private OnClickListener m_submitNewNoteListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			submitEditedNote();
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(m_editor.getWindowToken(),
-					0);
+			imm.hideSoftInputFromWindow(m_editor.getWindowToken(), 0);
 		}
 	};
-	
 	private OnClickListener m_editNoteListener = new OnClickListener() {
 
 		@Override
@@ -100,10 +104,17 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
+		// Always call super's onCreate
 		super.onCreate(savedInstanceState);
+
+		// Grab extras and set entry ID and session ID and set members
+		// appropriately
 		Bundle extras = getIntent().getExtras();
 		m_sessionId = extras.getLong("session");
 		m_entryId = extras.getLong("entry");
+
+		// Build the cardio entry member variables and initialize the layout
 		buildCardioExerciseEntryFromId();
 		initCardioView();
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -114,6 +125,8 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+
+			// Home was selected. Return to details activity
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
 			NavUtils.navigateUpTo(this, i);
@@ -125,13 +138,19 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	/**
+	 * Queries the DB for the full set of cardio information from the ID
+	 * gathered in the onCreate method and sets the members appropriately
+	 */
 	public void buildCardioExerciseEntryFromId() {
+
+		// Build the URI and then run the query
 		Uri uri = Uri.parse(ENTRY_CONTENT_STRING + "/entry/" + m_entryId);
 		Cursor cursor = getContentResolver().query(uri, PROJECTION, null, null,
 				null);
 		if (cursor.getCount() != 1) {
-			// Log.e(ViewCardioEntryActivity.class.getName(),
-			// 		"Rows returned should be 1! The ids are unique!");
+			// There should be extacly one entry. Something went wrong. Return
+			// to details activity
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
 			NavUtils.navigateUpTo(this, i);
@@ -140,6 +159,8 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 			return;
 		}
 		cursor.moveToFirst();
+
+		// Set member fields from results
 		m_entry = new ExerciseEntry(m_entryId, m_sessionId,
 				cursor.getString(0), ExerciseEntry.TYPE_CARDIO);
 		if (!cursor.isNull(3))
@@ -157,21 +178,32 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 		cursor.close();
 	}
 
+	/**
+	 * Initializes the view. Warnings and Lint are checked and handled in the
+	 * code
+	 */
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	public void initCardioView() {
+
+		// Get a random background image (from 2 options)
 		Resources res = getResources();
 		Random rand = new Random();
 		Drawable img;
 		if (rand.nextInt() % 2 == 0) {
 			img = res.getDrawable(R.drawable.cardio_1);
-		}
-		else{
+		} else {
 			img = res.getDrawable(R.drawable.cardio_2);
 		}
 		img.setAlpha(45);
+
+		// Set the title and initialize the view
 		setTitle(m_entry.getExreciseName());
 		setContentView(R.layout.view_entry_cardio);
+
+		// Grab the time and distance views. Then remove the views with no data
+		// to accept from the main layout. Fill the views that do have data to
+		// accept
 		TextView time = (TextView) findViewById(R.id.cardio_time_view);
 		TextView dist = (TextView) findViewById(R.id.cardio_dist_view);
 		LinearLayout layout = (LinearLayout) time.getParent();
@@ -189,6 +221,10 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 			layout.removeView(dist);
 			layout.removeView(findViewById(R.id.your_distance));
 		}
+
+		// If comments exist, bind the comments to the comments TextView and
+		// show the appropriate button to edit it. Otherwise, Keep the add note
+		// button and leave the TextView blank
 		if (m_entry.getComments() != null) {
 			m_noteView = (TextView) findViewById(R.id.cardio_note_view);
 			m_noteLayout = (LinearLayout) findViewById(R.id.add_cardio_notes);
@@ -203,6 +239,8 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 			m_addNoteButton = (Button) findViewById(R.id.add_cardio_note);
 			m_addNoteButton.setOnClickListener(m_addNoteListener);
 		}
+
+		// Actually set the background
 		m_mainLayout = (LinearLayout) m_noteLayout.getParent();
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -212,20 +250,25 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	/**
+	 * Builds the note editor when someone wants to add or edit a note
+	 */
 	public void buildNoteEditor() {
-		if (m_noteLayout == null) {
-			// Log.e(ViewCardioEntryActivity.class.getName(),
-			// 		"This layout should never be null if the "
-			// 				+ "button to add notes is present");
-		}
 
+		// Initialize the note editor if it hasn't been used yet
 		if (m_editNoteLayout == null) {
+
+			// Inflate the edit note layout and bind the inflated views to their
+			// appropriate members
 			LayoutInflater inflater = getLayoutInflater();
 			m_editNoteLayout = (LinearLayout) inflater.inflate(
 					R.layout.add_note, null);
 			m_editor = (EditText) m_editNoteLayout.findViewById(R.id.edit_note);
 			m_submitButton = (Button) m_editNoteLayout
 					.findViewById(R.id.submit_button);
+
+			// Set the listener for if a user hits enter to close the editor and
+			// add the note
 			m_editor.setOnKeyListener(new OnKeyListener() {
 				public boolean onKey(View v, int keyCode, KeyEvent event) {
 					if (event.getAction() == KeyEvent.ACTION_DOWN
@@ -246,8 +289,12 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 					return false;
 				}
 			});
+
+			// Set the click listener for the edit note's button
 			m_submitButton.setOnClickListener(m_submitNewNoteListener);
 		}
+
+		// Add the editor to the layout and request focus
 		m_noteLayout.addView(m_editNoteLayout);
 		((LinearLayout) m_addNoteButton.getParent())
 				.removeView(m_addNoteButton);
@@ -255,16 +302,28 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 
 	}
 
+	/**
+	 * Submits the edited note to the DB and clears the editor
+	 */
 	public void submitEditedNote() {
+
+		// Remove the editor from the main layout and change the add a note
+		// button to say edit note
 		m_noteLayout.removeView(m_editNoteLayout);
 		m_addNoteButton.setText("Edit Note");
+
+		// Set the button's listener to the edit note listener
 		m_addNoteButton.setOnClickListener(m_editNoteListener);
+
+		// Update the comment column of the specified entry
 		ContentValues values = new ContentValues();
 		values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_COMMENT, m_editor
 				.getText().toString());
 		m_entry.setComments(m_editor.getText().toString());
 		Uri uri = Uri.parse(ENTRY_CONTENT_STRING + "/entry/" + m_entryId);
 		getContentResolver().update(uri, values, null, null);
+
+		// Set the note view's text to the new note and re add it to the layout
 		m_noteView.setText(m_entry.getComments());
 		m_noteLayout.addView(m_noteView);
 		m_addNoteButton.setText("Edit Note");
@@ -272,13 +331,13 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 		m_mainLayout.addView(m_addNoteButton);
 
 	}
-	
-	public void editNote(){
-		if (m_noteLayout == null) {
-			// Log.e(ViewCardioEntryActivity.class.getName(),
-			// 		"This layout should never be null if the "
-			// 				+ "button to edit notes is present");
-		}
+
+	/**
+	 * Enables the user to edit the note they have previously added
+	 */
+	public void editNote() {
+
+		// If the editor has not been initialized, initialize it
 		if (m_editNoteLayout == null) {
 			LayoutInflater inflater = getLayoutInflater();
 			m_editNoteLayout = (LinearLayout) inflater.inflate(
@@ -308,6 +367,8 @@ public class ViewCardioEntryActivity extends SherlockFragmentActivity {
 			});
 			m_submitButton.setOnClickListener(m_submitNewNoteListener);
 		}
+
+		// Remove the unnecessary views and add the appropriate ones
 		m_noteLayout.removeView(m_noteView);
 		m_noteLayout.addView(m_editNoteLayout);
 		((LinearLayout) m_addNoteButton.getParent())

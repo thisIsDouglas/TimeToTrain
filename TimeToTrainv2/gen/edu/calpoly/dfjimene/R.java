@@ -979,8 +979,9 @@ containing a value of this type.
         public static final int cardio_time_view=0x7f04005e;
         public static final int confirm_set=0x7f040053;
         public static final int delete_entry=0x7f04006e;
-        public static final int delete_session=0x7f040071;
-        public static final int details_help=0x7f04006f;
+        public static final int delete_session=0x7f040072;
+        public static final int details_help=0x7f040070;
+        public static final int detailsmenusurvey=0x7f04006f;
         public static final int disableHome=0x7f040009;
         public static final int distance_text=0x7f040036;
         public static final int edit_distance=0x7f040039;
@@ -990,7 +991,7 @@ containing a value of this type.
         public static final int edit_query=0x7f040026;
         public static final int edit_reps=0x7f040051;
         public static final int edit_seconds=0x7f040038;
-        public static final int edit_session=0x7f040070;
+        public static final int edit_session=0x7f040071;
         public static final int edit_session_name=0x7f040045;
         public static final int edit_weight=0x7f04004d;
         public static final int entry_list=0x7f040047;
@@ -1001,7 +1002,8 @@ containing a value of this type.
         public static final int lb_button=0x7f040050;
         public static final int listMode=0x7f040002;
         public static final int menu_next=0x7f04006d;
-        public static final int menuhelp=0x7f040072;
+        public static final int menuhelp=0x7f040074;
+        public static final int menusurvey=0x7f040073;
         public static final int minutes_text=0x7f040034;
         public static final int normal=0x7f040001;
         public static final int radio_cardio=0x7f040040;
@@ -1152,6 +1154,7 @@ containing a value of this type.
         public static final int kilograms=0x7f09003b;
         public static final int lb=0x7f090037;
         public static final int menu_help=0x7f090016;
+        public static final int menu_survey=0x7f09003d;
         public static final int minutes=0x7f090026;
         public static final int next_string=0x7f090024;
         public static final int notes=0x7f09002f;

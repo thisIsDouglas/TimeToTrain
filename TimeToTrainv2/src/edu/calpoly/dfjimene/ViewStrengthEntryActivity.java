@@ -41,6 +41,13 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+/**
+ * View Entry Activity for strength based exercises allows user to add sets and
+ * notes
+ * 
+ * @author Douglas Jimenez
+ * 
+ */
 public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 	/** Json keys */
@@ -106,18 +113,15 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 		}
 	};
-
 	private OnClickListener m_submitNewNoteListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			submitEditedNote();
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(m_editor.getWindowToken(),
-					0);
+			imm.hideSoftInputFromWindow(m_editor.getWindowToken(), 0);
 		}
 	};
-
 	private OnClickListener m_editNoteListener = new OnClickListener() {
 
 		@Override
@@ -135,16 +139,15 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 		}
 	};
-
 	private OnClickListener m_submitSetListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			submitNewSet();
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			EditText view = (EditText)m_editSetLayout.findViewById(R.id.edit_reps);
-			imm.hideSoftInputFromWindow(view.getWindowToken(),
-					0);
+			EditText view = (EditText) m_editSetLayout
+					.findViewById(R.id.edit_reps);
+			imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 		}
 	};
 
@@ -156,10 +159,16 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
+		// Always call super's onCreate
 		super.onCreate(savedInstanceState);
+
+		// Get extras and set the session and entry member IDs
 		Bundle extras = getIntent().getExtras();
 		m_sessionId = extras.getLong("session");
 		m_entryId = extras.getLong("entry");
+
+		// Initialize the layout after grabbing the entry from the DB
 		buildStrengthExerciseEntryFromId();
 		initStrengthView();
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -170,6 +179,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+
+			// Home was just selected. Return to parent activity
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
 			NavUtils.navigateUpTo(this, i);
@@ -181,13 +192,20 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	/**
+	 * Grabs the strength based entry from the DB and initializes its members
+	 * based on the returned columns
+	 */
 	public void buildStrengthExerciseEntryFromId() {
+
+		// Create the URI striung and query for the ONLY entry
 		Uri uri = Uri.parse(ENTRY_CONTENT_STRING + "/entry/" + m_entryId);
 		Cursor cursor = getContentResolver().query(uri, PROJECTION, null, null,
 				null);
 		if (cursor.getCount() != 1) {
-			// Log.e(ViewStrengthEntryActivity.class.getName(),
-			// 		"Rows returned should be 1! The ids are unique!");
+
+			// There should only be one unique entry. This is bad. Let's go back
+			// to the parent
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
 			NavUtils.navigateUpTo(this, i);
@@ -195,6 +213,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			cursor.close();
 			return;
 		}
+
+		// Set the members appropriately
 		cursor.moveToFirst();
 		m_entry = new ExerciseEntry(m_entryId, m_sessionId,
 				cursor.getString(0), ExerciseEntry.TYPE_STRENGTH);
@@ -209,30 +229,43 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		cursor.close();
 	}
 
+	/**
+	 * Initializes the strength exercise view and its note and sets. Handles
+	 * warnings and lint in line
+	 */
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	public void initStrengthView() {
+
+		// Grab a random image for the background (Between 2 options)
 		Resources res = getResources();
 		Random rand = new Random();
 		Drawable img;
 		if (rand.nextInt() % 2 == 0) {
 			img = res.getDrawable(R.drawable.strength_1);
-		}
-		else{
+		} else {
 			img = res.getDrawable(R.drawable.strength_2);
 		}
 		img.setAlpha(45);
+
+		// Set the title and initializes the layout. Bind the sublayouts to
+		// their appropriate member variables
 		setTitle(m_entry.getExreciseName());
 		setContentView(R.layout.view_entry_strength);
 		m_noteLayout = (LinearLayout) findViewById(R.id.strength_notes_layout);
 		m_setLayout = (LinearLayout) findViewById(R.id.add_strength_set_container);
 		m_mainLayout = (LinearLayout) m_noteLayout.getParent();
+
+		// Set the background
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 			((ScrollView) m_mainLayout.getParent()).setBackgroundDrawable(img);
 		} else {
 			((ScrollView) m_mainLayout.getParent()).setBackground(img);
 		}
+
+		// Initialize the note layouts and bind them to their appropriate member
+		// variables
 		m_addSetButton = (Button) findViewById(R.id.add_strength_set);
 		m_setLayout.removeAllViews();
 		if (m_entry.getComments() != null) {
@@ -249,8 +282,11 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			m_addNoteButton = (Button) findViewById(R.id.add_strength_note);
 			m_addNoteButton.setOnClickListener(m_addNoteListener);
 		}
+
+		// Pull all previously existing sets from the JSON string
 		JSONObject json;
 		JSONArray jsonArr;
+
 		// Do all json work inside this try/catch statement
 		try {
 			json = new JSONObject(m_entry.getSets());
@@ -270,7 +306,7 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 				}
 			}
 		} catch (JSONException e) {
-			// Log.e(ViewStrengthEntryActivity.class.getName(), "Bad JSON format.");
+			// JSON exception. Whoops. Return to parent
 			e.printStackTrace();
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
@@ -278,6 +314,9 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			finish();
 			return;
 		}
+
+		// Add sets to the set layout after initializing the view they will be
+		// put in
 		LayoutInflater inflater = getLayoutInflater();
 		for (int i = 0; i < m_listSets.size(); i++) {
 			Map<String, String> m = m_listSets.get(i);
@@ -298,24 +337,32 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 			m_setLayout.addView(layout);
 		}
+
+		// Add the add set button to the set layout and set its on click
+		// listener
 		m_setLayout.addView(m_addSetButton);
 		m_addSetButton.setOnClickListener(m_addSetListener);
 	}
 
+	/**
+	 * Builds the note editor for the user to add notes.
+	 */
 	public void buildNoteEditor() {
-		if (m_noteLayout == null) {
-			// Log.e(ViewCardioEntryActivity.class.getName(),
-			// 		"This layout should never be null if the "
-			// 				+ "button to add notes is present");
-		}
 
+		// If the note layout is not already initialized, initialize it
 		if (m_editNoteLayout == null) {
+
+			// Inflate the editor layout and bind its components to activity
+			// members
 			LayoutInflater inflater = getLayoutInflater();
 			m_editNoteLayout = (LinearLayout) inflater.inflate(
 					R.layout.add_note, null);
 			m_editor = (EditText) m_editNoteLayout.findViewById(R.id.edit_note);
 			m_submitButton = (Button) m_editNoteLayout
 					.findViewById(R.id.submit_button);
+
+			// Set the EditText's on key listener to submit when enter is
+			// pressed
 			m_editor.setOnKeyListener(new OnKeyListener() {
 				public boolean onKey(View v, int keyCode, KeyEvent event) {
 					if (event.getAction() == KeyEvent.ACTION_DOWN
@@ -336,8 +383,12 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 					return false;
 				}
 			});
+
+			// Initialize submit button's on click listener
 			m_submitButton.setOnClickListener(m_submitNewNoteListener);
 		}
+
+		// Add the editor to the note layout and request focus
 		m_noteLayout.addView(m_editNoteLayout);
 		((LinearLayout) m_addNoteButton.getParent())
 				.removeView(m_addNoteButton);
@@ -345,7 +396,13 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 	}
 
+	/**
+	 * Updates the entry in the DB and refreshes the views
+	 */
 	public void submitEditedNote() {
+
+		// Update the comments column for the entry and set the TextView's text
+		// to the new note
 		m_noteLayout.removeView(m_editNoteLayout);
 		m_addNoteButton.setText("Edit Note");
 		m_addNoteButton.setOnClickListener(m_editNoteListener);
@@ -356,6 +413,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		Uri uri = Uri.parse(ENTRY_CONTENT_STRING + "/entry/" + m_entryId);
 		getContentResolver().update(uri, values, null, null);
 		m_noteView.setText(m_entry.getComments());
+
+		// Remove the editor and add the TextView
 		m_noteLayout.addView(m_noteView);
 		m_addNoteButton.setText("Edit Note");
 		m_addNoteButton.setOnClickListener(m_editNoteListener);
@@ -363,13 +422,16 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 
 	}
 
+	/**
+	 * Creates the display allowing the user to edit their notes
+	 */
 	public void editNote() {
-		if (m_noteLayout == null) {
-			// Log.e(ViewCardioEntryActivity.class.getName(),
-			// 		"This layout should never be null if the "
-			// 				+ "button to edit notes is present");
-		}
+
+		// If the editor is not initialized, initialize it
 		if (m_editNoteLayout == null) {
+
+			// Inflate the editor and bind its components to the activity's
+			// members
 			LayoutInflater inflater = getLayoutInflater();
 			m_editNoteLayout = (LinearLayout) inflater.inflate(
 					R.layout.add_note, null);
@@ -398,6 +460,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			});
 			m_submitButton.setOnClickListener(m_submitNewNoteListener);
 		}
+
+		// Remove unnecessary views and post relevant ones
 		m_noteLayout.removeView(m_noteView);
 		m_noteLayout.addView(m_editNoteLayout);
 		((LinearLayout) m_addNoteButton.getParent())
@@ -406,14 +470,16 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		m_editor.requestFocus();
 	}
 
+	/**
+	 * Builds the set editor for adding new sets to a strength entry
+	 */
 	public void buildSetEditor() {
-		if (m_setLayout == null) {
-			// Log.e(ViewCardioEntryActivity.class.getName(),
-			// 		"This layout should never be null if the "
-			// 				+ "button to add notes is present");
-		}
 
+		// If the set editor is uninitialized, initialize it
 		if (m_editSetLayout == null) {
+
+			// Inflate the set editor and bind its views to the activity's
+			// members
 			LayoutInflater inflater = getLayoutInflater();
 			m_editSetLayout = (LinearLayout) inflater.inflate(R.layout.set_add,
 					null);
@@ -422,6 +488,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			m_submitSet.setOnClickListener(m_submitSetListener);
 			m_editSetGroup = (RadioGroup) m_editSetLayout
 					.findViewById(R.id.units_group);
+
+			// Set checked change listener for units and set a default
 			m_editSetGroup
 					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -440,12 +508,21 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 					});
 			m_editSetGroup.check(R.id.kg_button);
 		}
+
+		// Remove the add set button and add the editor
 		m_setLayout.removeView(m_addSetButton);
 		m_setLayout.addView(m_editSetLayout);
 
 	}
 
+	/**
+	 * Adds the new set to the JSON string, updates the DB, and then refreshes
+	 * the set layout
+	 */
 	public void submitNewSet() {
+
+		// Check if the reps and weight have been populated. If not, remove the
+		// editor, add the add set button again, and return
 		EditText reps, weight;
 		reps = (EditText) m_setLayout.findViewById(R.id.edit_reps);
 		weight = (EditText) m_setLayout.findViewById(R.id.edit_weight);
@@ -459,6 +536,8 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			return;
 		}
 
+		// Create a hashmap for the set and add its values to the map based on
+		// the appropriate key
 		HashMap<String, String> map = new HashMap<String, String>();
 		if (m_checked == KG_CHECKED)
 			map.put(JSON_WEIGHT_UNITS, "kg");
@@ -468,12 +547,23 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		map.put(JSON_REPS, reps.getText().toString());
 		weight.setText("");
 		reps.setText("");
+
+		// Remove the editor and add the hashmap to the JSON string
 		m_setLayout.removeView(m_editSetLayout);
 		addSetToList(map);
 		m_setLayout.addView(m_addSetButton);
 	}
 
+	/**
+	 * Adds the set to the set list, then updates the DB
+	 * 
+	 * @param map
+	 *            the hashmap to be added to the list
+	 */
 	public void addSetToList(Map<String, String> map) {
+
+		// Inflate the set view layout and add the map to the list. Then bind
+		// the map's values to the set view's fields
 		LayoutInflater inflater = getLayoutInflater();
 		m_listSets.add(map);
 		LinearLayout setLayout = (LinearLayout) inflater.inflate(
@@ -490,12 +580,18 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 		view = (TextView) setLayout.findViewById(R.id.reps_for_set);
 		view.setText(map.get(JSON_REPS));
 
+		// Add the view to the layout and sync
 		m_setLayout.addView(setLayout);
 		syncSetListWithDb();
 
 	}
 
+	/**
+	 * Syncs the updated JSON string with the sets column of the entry
+	 */
 	public void syncSetListWithDb() {
+
+		// Convert the entire array to a JSON array
 		JSONObject json;
 		// Do all json work inside this try/catch statement
 		try {
@@ -512,7 +608,7 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			json.put(JSON_ARR_KEY, jsonArr);
 
 		} catch (JSONException e) {
-			// Log.e(ViewStrengthEntryActivity.class.getName(), "Bad JSON format.");
+			// Uh oh. Bad JSON? Return to parent activity
 			e.printStackTrace();
 			Intent i = new Intent(this, SessionDetailsActivity.class);
 			i.putExtra(SessionListActivity.INTENT_SESSION_ID, m_sessionId);
@@ -520,8 +616,11 @@ public class ViewStrengthEntryActivity extends SherlockFragmentActivity {
 			finish();
 			return;
 		}
+
+		// Set the sets string
 		m_entry.setSets(json.toString());
 
+		// Update the value in the DB
 		ContentValues values = new ContentValues();
 		values.put(TimeToTrainTables.EXERCISE_ENTRIES_KEY_SETS,
 				m_entry.getSets());

@@ -4,9 +4,14 @@
     tools:context="edu.calpoly.dfjimene.SessionListActivity" >
 
     <item
+        android:id="@+id/menusurvey"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/menu_survey">
+    </item>
+    <item
         android:id="@+id/menuhelp"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/menu_help" >
+        android:title="@string/menu_help">
     </item>
 
 </menu>

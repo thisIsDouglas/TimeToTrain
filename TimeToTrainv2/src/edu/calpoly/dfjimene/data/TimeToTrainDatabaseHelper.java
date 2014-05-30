@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
+/**
+ * Database helper for creating and upgrading the database.
+ * @author Douglas Jimenez
+ *
+ */
 public class TimeToTrainDatabaseHelper extends SQLiteOpenHelper{
    
    /** Database name */
